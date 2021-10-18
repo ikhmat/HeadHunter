@@ -4,9 +4,9 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="Role" class="control-label">Роль</label>
-        <input asp-for="Role" id="radio1" type="radio" value="applicant" />
+        <input asp-for="Role" id="radio1" type="radio" value="applicant" onclick="close()"/>
         <label for="radio1">applicant</label><br />
-        <input asp-for="Role" id="radio2" type="radio" value="boss" />
+        <input asp-for="Role" id="radio2" type="radio" value="boss" onclick="open()"/>
         <label for="radio2">boss</label>
         <span asp-validation-for="Role" class="text-danger"></span>
     </div>
@@ -30,6 +30,11 @@
         <input asp-for="Surname" class="form-control" />
         <span asp-validation-for="Surname" class="text-danger"></span>
     </div>
+    <div id="company" class="form-group" style="display: none;">
+        <label asp-for="CompanyName" class="control-label">Название компании</label>
+        <input asp-for="CompanyName" class="form-control" />
+        <span asp-validation-for="CompanyName" class="text-danger"></span>
+    </div>
     <div class="form-group">
         <label asp-for="PhoneNumber" class="control-label">Номер телефона</label>
         <input asp-for="PhoneNumber" class="form-control" />
@@ -52,3 +57,18 @@
     </div>
     <input type="submit" value="Отправить" />
 </form>
+
+
+@section Scripts
+{
+    <script>
+        function open() {
+            console.log("open");
+            $('#company').show();
+        }
+        function close() {
+            console.log("close");
+            $('#company').hide();
+        }
+</script>   
+}
