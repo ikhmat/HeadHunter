@@ -1,0 +1,89 @@
+﻿@model BossesProfileViewModel
+
+
+@{
+    ViewBag.Title = @Model.User.UserName;
+    Layout = "_Layout";
+}
+<div class="row" style="padding-top: 20px;">
+    <div class="col-4">
+        <img src="~/avatars/@Model.User.LinkImg" alt="avatar" style="vertical-align: middle; width: 150px; height: 150px; margin-left: auto; margin-right: auto; display: block;">
+    </div>
+    <div style="width:66%;padding-left:40px;">
+        <span style="font-size:30px;">@Model.User.UserName</span><br />
+        <span>Email: @Model.User.Email</span><br />
+        <span>Name: @Model.User.Name</span><br />
+        <span>Surname: @Model.User.Surname</span><br />
+        <span>Company: @Model.User.CompanyName</span><br />
+        <span>Phone number: @Model.User.Email</span><br />
+        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#editModal">Edit</button>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalitle">Редактирование</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Edit" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="User.Email" class="control-label">Почта</label>
+                        <input asp-for="User.Email" class="form-control" />
+                        <span asp-validation-for="User.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="User.Surname" class="control-label">Фамилие</label>
+                        <input asp-for="User.Surname" class="form-control" />
+                        <span asp-validation-for="User.Surname" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="User.Name" class="control-label">Имя</label>
+                        <input asp-for="User.Name" class="form-control" />
+                        <span asp-validation-for="User.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserName" class="control-label">Никнейм</label>
+                        <input asp-for="UserName" class="form-control" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserName" class="control-label">Никнейм</label>
+                        <input asp-for="UserName" class="form-control" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="User.CompanyName" class="control-label">Компания</label>
+                        <input asp-for="User.CompanyName" class="form-control" />
+                        <span asp-validation-for="User.CompanyName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="File" class="control-label">Редактирование аватарки</label>
+                        <input asp-for="File" type="file" class="form-control" />
+                        <span asp-validation-for="File" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <input type="submit" value="Сохранить" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus')
+        })
+    </script>
+}
