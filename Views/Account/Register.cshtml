@@ -1,12 +1,12 @@
 ﻿@model RegisterViewModel
-
+@Html.ValidationMessage("Mes")
 <form asp-action="Register" enctype="multipart/form-data" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="Role" class="control-label">Роль</label>
-        <input asp-for="Role" id="radio1" type="radio" value="applicant"/>
+        <input asp-for="Role" id="radio1" type="radio" value="applicant" />
         <label for="radio1">applicant</label><br />
-        <input asp-for="Role" id="radio2" type="radio" value="boss"/>
+        <input asp-for="Role" id="radio2" type="radio" value="boss" />
         <label for="radio2">boss</label>
         <span asp-validation-for="Role" class="text-danger"></span>
     </div>
@@ -61,8 +61,11 @@
 
 @section Scripts
 {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
         $('#radio1').on('click', () => $('#company').hide());
         $('#radio2').on('click', () => $('#company').show());
-    </script>   
+    </script>
 }
