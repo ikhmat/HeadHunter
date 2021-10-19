@@ -76,7 +76,7 @@ namespace HeadHunter.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _userManager.FindByNameAsync(model.EmailOrNickname);
+                User user = await _userManager.FindByEmailAsync(model.EmailOrNickname);
                 user = user == null ? await _userManager.FindByNameAsync(model.EmailOrNickname) : user;
 
                 var result =
@@ -99,7 +99,6 @@ namespace HeadHunter.Controllers
             }
             return View(model);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
