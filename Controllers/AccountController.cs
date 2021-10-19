@@ -107,9 +107,9 @@ namespace HeadHunter.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
-        public bool CheckNickName(string name)
+        public bool CheckNickName(string nickName)
         {
-            return !_userManager.Users.Any(b => b.UserName == name);
+            return !_userManager.Users.Any(b => b.UserName == nickName);
         }
     }
 }
