@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,6 +16,7 @@ namespace HeadHunter.ViewModels
 
         [Required]
         [Display(Name = "Nickname")]
+        [Remote(action: "CheckNickName", controller: "Account", ErrorMessage = "Это имя пользователя уже занято")]
         public string Nickname { get; set; }
 
         [Required]
