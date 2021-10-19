@@ -9,8 +9,7 @@ namespace HeadHunter.ViewModels
 {
     public class BossesProfileViewModel
     {
-        public User User;
-        public IFormFile File;
-        public string UserName;
+        public User User { get; set; }
+        public IFormFile File { get; set; }
     }
 }
