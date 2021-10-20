@@ -72,9 +72,11 @@ namespace HeadHunter.Controllers
             return RedirectToAction("Profile");
         }
 
-        public IActionResult AddCategory(string text)
+        public async Task<IActionResult> AddCategory(string text)
         {
             CategoryVacancy category = new CategoryVacancy { Id = Guid.NewGuid().ToString(), Name = text };
+            _db.CategoryVacancies.Add(category);
+            await _db.SaveChangesAsync();
             return Json(category);
         }
     }
