@@ -44,10 +44,15 @@ namespace HeadHunter.Controllers
                         await file.CopyToAsync(stream);
                     }
                     user.LinkImg = filename;
-                    _context.SaveChanges();
                 }
+                user.Email = formUser.Email;
+                user.UserName = formUser.UserName;
+                user.Surname = formUser.Surname;
+                user.Name = formUser.Name;
+                user.PhoneNumber = formUser.PhoneNumber;
+                await _context.SaveChangesAsync();
             }
-            return View(user);
+            return RedirectToActionPermanent("Profile");
         }
     }
 }
