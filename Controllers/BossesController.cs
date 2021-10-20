@@ -59,5 +59,23 @@ namespace HeadHunter.Controllers
             }
             return RedirectToAction("Profile");
         }
+
+        public IActionResult AddVacancy()
+        {
+            ViewBag.Categories = _db.CategoryVacancies.ToList();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddVacancy(Vacancy vacancy)
+        {
+            return RedirectToAction("Profile");
+        }
+
+        public IActionResult AddCategory(string text)
+        {
+            CategoryVacancy category = new CategoryVacancy { Id = Guid.NewGuid().ToString(), Name = text };
+            return Json(category);
+        }
     }
 }
