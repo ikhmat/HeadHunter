@@ -71,6 +71,7 @@
                     $('#categories option:last').before('<option value="' + data['id'] + '">' + data['name'] + '</option>');
                     $('#newCategory-text').val('');
                     $('#newCategory').hide();
+                    $('#categories').val(data['id']);
                 },
             });
         }
