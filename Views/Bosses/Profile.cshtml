@@ -10,6 +10,8 @@
     </div>
     <div class="col-7 pt-3">
         <p>Nickname: <b style="font-size:25px;">@Model.Nickname</b></p>
+        <p>Email: @Model.Email</p>
+        <p>Phone: @Model.PhoneNumber</p>
         <p>Surname: @Model.Surname</p>
         <p>Name: @Model.Name</p>
         <p>Компания: @Model.CompanyName</p>
@@ -86,6 +88,7 @@
                     <div class="form-group">
                         <label asp-for="Nickname" class="control-label">Никнейм</label>
                         <input asp-for="Nickname" class="form-control" value="@Model.Nickname" />
+                        <span asp-validation-for="Nickname" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Surname" class="control-label">Фамилие</label>
@@ -111,12 +114,18 @@
                     <button id="editModalButton" type="submit" class="btn btn-primary ml-3">Сохранить</button>
                 </form>
 
-                @section Scripts
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
                 {
-                    @{
-                        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-                    }
-                    <script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
                         function Update(id) {
                             $.ajax({
                                 url: '@Url.Action("UpdateVacancy", "Bosses")',
@@ -148,10 +157,5 @@
                                 },
                             });
                         }
-                    </script>
-                }
-            </div>
-        </div>
-    </div>
-</div>
-
+    </script>
+}
