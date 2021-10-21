@@ -15,6 +15,10 @@
         <br /><span>Phone number: @Model.Email</span>
         <button type="button" class="btn btn-light" data-toggle="modal" data-target="#editModal">Edit</button>
     </div>
+    <hr>
+    <div class="px-2">
+        <a asp-action="AddResume" asp-controller="Applicant">Add new resume</a>
+    </div>
 </div>
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

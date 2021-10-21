@@ -52,7 +52,21 @@ namespace HeadHunter.Controllers
                 user.PhoneNumber = formUser.PhoneNumber;
                 await _context.SaveChangesAsync();
             }
-            return RedirectToActionPermanent("Profile");
+            return RedirectToAction("Profile");
+        }
+        [HttpGet]
+        public IActionResult AddResume()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AddResume(Resume resume)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("Profile");
+            }
+            return View(resume);
         }
     }
 }

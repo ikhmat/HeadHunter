@@ -38,7 +38,7 @@ namespace HeadHunter.Models
         public string UserId { get; set; }
         public User User { get; set; }
         [Required]
-        [Display(Name = "Wage")]
+        [Display(Name = "Desired wage")]
         public int Wage { get; set; }
         public DateTime UpdateDate { get; set; }
     }
