@@ -9,6 +9,8 @@ namespace HeadHunter.Models
 {
     public class ApplicationContext : IdentityDbContext<User>
     {
+        public DbSet<Resume> Resumes { get; set; }
+        public DbSet<WorkExpirience> WorkExpiriences { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
     }
 }
