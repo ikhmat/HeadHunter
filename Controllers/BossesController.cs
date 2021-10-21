@@ -120,5 +120,20 @@ namespace HeadHunter.Controllers
             return Json(vacancy);
         }
 
+        public async Task<IActionResult> Disagreement(string id)
+        {
+            Vacancy vacancy = _db.Vacancies.Find(id);
+            vacancy.Agreement = !vacancy.Agreement;
+            _db.Vacancies.Update(vacancy);
+            await _db.SaveChangesAsync();
+            return Json(vacancy);
+        }
+
+        public IActionResult EditVacancy(string id)
+        {
+            Vacancy vacancy = _db.Vacancies.Find(id);
+            return View(vacancy);
+        }
+
     }
 }

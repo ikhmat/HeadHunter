@@ -33,12 +33,28 @@
                 <td id="date-@item.Id" style="width: 25%;">@item.DateOfUpdate.ToUniversalTime()</td>
                 <td style="width: 25%;">
                     <a class="btn btn-light border-dark" onclick="Update('@item.Id')">Обновить</a>
-                    <a asp-controller="Boses" asp-action="EditVacancy" class="btn btn-light border-dark" asp-route-id="@item.Id">Редактировать</a>
+                    <a asp-controller="Bosses" asp-action="EditVacancy" class="btn btn-light border-dark" asp-route-id="@item.Id">Редактировать</a><br />
+                    @if (item.Agreement)
+                    {
+                        <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Снять с публикации</a>
+                    }
+                    else
+                    {
+                        <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Добавить в публикации</a>
+                    }
                 </td>
             </tr>
         }
     </table>
 </div>
+
+<div id="false" class="alert alert-success position-fixed" role="alert" style="display: none; bottom: 0; right: 20px;">
+    Вакансия снята с публикации
+</div>
+<div id="true" class="alert alert-success position-fixed" role="alert" style="display: none; bottom: 0; right: 20px;">
+    Вакансия добавлена в публикации
+</div>
+
 
 <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="EditModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -63,7 +79,6 @@
                     <div class="form-group">
                         <label asp-for="Nickname" class="control-label">Никнейм</label>
                         <input asp-for="Nickname" class="form-control" value="@Model.Nickname" />
-                        <span asp-validation-for="Nickname" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Surname" class="control-label">Фамилие</label>
@@ -94,26 +109,39 @@
                     @{
                         await Html.RenderPartialAsync("_ValidationScriptsPartial");
                     }
-            <script>
+                    <script>
                         function Update(id) {
                             $.ajax({
                                 url: '@Url.Action("UpdateVacancy", "Bosses")',
                                 type: 'POST',
                                 data: { 'id': id },
                                 success: function (data) {
-                                    console.log(data['dateOfUpdate']);
-                                    console.log('#date-' + id);
-                                    console.log(data['dateOfUpdate']);
 
-                                    let dateTime = new Date(data['dateOfUpdate']).toLocaleString()
-                                    console.log(typeof dateTime);
-                                    console.log($('#date-' + id).val());
-                                    $('#date-' + id).text(dateTime)
-                                    //$('#hide-text-' + pubId).text(data['description']);
+                                    let dateTime = new Date(data['dateOfUpdate']).toLocaleString();
+                                    $('#date-' + id).text(dateTime);
                                 },
                             });
                         }
-            </script>
+                        function Disagreement(id) {
+                            $.ajax({
+                                url: '@Url.Action("Disagreement", "Bosses")',
+                                type: 'POST',
+                                data: { 'id': id },
+                                success: function (data) {
+                                    if (data['agreement'] == false) {
+                                        $('#buttonAgreement').text('Добавить в публикации');
+                                        $("#false").show();
+                                        setTimeout(function () { $("#false").hide(); }, 3000);
+                                    }
+                                    else {
+                                        $('#buttonAgreement').text('Снять с публикации');
+                                        $("#true").show();
+                                        setTimeout(function () { $("#true").hide(); }, 3000);
+                                    }
+                                },
+                            });
+                        }
+                    </script>
                 }
             </div>
         </div>
