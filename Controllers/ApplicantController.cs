@@ -27,6 +27,8 @@ namespace HeadHunter.Controllers
         public IActionResult Profile()
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+            var resumes = _context.Resumes.Where(r => r.UserId == _userManager.GetUserId(User));
+            ViewBag.Resumes = resumes;
             return View(user);
         }
         [HttpPost]
@@ -60,13 +62,18 @@ namespace HeadHunter.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult AddResume(Resume resume)
+        public async Task<IActionResult> AddResume(Resume formResume)
         {
             if (ModelState.IsValid)
             {
+                formResume.Id = Guid.NewGuid().ToString();
+                formResume.UpdateDate = DateTime.Now;
+                formResume.UserId = _userManager.GetUserId(User);
+                _context.Resumes.Add(formResume);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Profile");
             }
-            return View(resume);
+            return View(formResume);
         }
     }
 }

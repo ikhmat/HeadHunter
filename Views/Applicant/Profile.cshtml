@@ -3,21 +3,38 @@
     ViewBag.Title = Model.UserName;
     Layout = "_Layout";
 }
-<div class="row" style="padding-top: 20px;">
-    <div class="col-4">
-        <img src="~/avatars/@Model.LinkImg" alt="avatar" style="vertical-align: middle; width: 150px; height: 150px; margin-left: auto; margin-right: auto; display: block;">
-    </div>
-    <div style="width:66%;padding-left:40px;">
-        <span style="font-size:30px;">@Model.UserName</span>
-        <br /><span>Email: @Model.Email</span>
-        <br /><span>Name: @Model.Name</span>
-        <br /><span>Surname: @Model.Surname</span>
-        <br /><span>Phone number: @Model.Email</span>
-        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#editModal">Edit</button>
+<div style="width:80%; margin-left:auto; margin-right:auto;">
+    <div class="row" style="padding-top: 20px;">
+        <div class="col-4">
+            <img src="~/avatars/@Model.LinkImg" alt="avatar" style="vertical-align: middle; width: 150px; height: 150px; margin-left: auto; margin-right: auto; display: block;">
+        </div>
+        <div style="width:66%;padding-left:40px;">
+            <span style="font-size:30px;">@Model.UserName</span>
+            <br /><span>Email: @Model.Email</span>
+            <br /><span>Name: @Model.Name</span>
+            <br /><span>Surname: @Model.Surname</span>
+            <br /><span>Phone number: @Model.Email</span>
+            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#editModal">Edit</button>
+        </div>
     </div>
     <hr>
-    <div class="px-2">
+    <div class="py-2">
         <a asp-action="AddResume" asp-controller="Applicant">Add new resume</a>
+    </div>
+    <div class="resumes">
+        @foreach (var item in ViewBag.Resumes)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <h5 class="card-title">@item.JobTitle</h5>
+                        <a asp-action="EditResume" asp-route-resumeId="@item.Id" class="btn btn-primary ml-auto mr-2">Edit</a>
+                        <a asp-action="UpdateResume" asp-route-resumeId="@item.Id" class="btn btn-primary">Update</a>
+                    </div>
+                    <p class="card-text"><small class="text-muted">Last updated @item.UpdateDate</small></p>
+                </div>
+            </div>
+        }
     </div>
 </div>
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">

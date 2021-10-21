@@ -27,10 +27,20 @@
         <input asp-for="CityName" class="form-control" />
         <span asp-validation-for="CityName" class="text-danger"></span>
     </div>
+    <div class="form-group">
+        <label asp-for="JobTitle" class="control-label"></label>
+        <input asp-for="JobTitle" class="form-control" />
+        <span asp-validation-for="JobTitle" class="text-danger"></span>
+    </div>
     <div id="company" class="form-group" style="display: none;">
         <label asp-for="CategoryId" class="control-label"></label>
         <input asp-for="CategoryId" class="form-control" />
         <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Wage" class="control-label"></label>
+        <input asp-for="Wage" class="form-control" />
+        <span asp-validation-for="Wage" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="PhoneNumber" class="control-label"></label>
@@ -51,11 +61,6 @@
         <label asp-for="LinkedInLink" class="control-label"></label>
         <input asp-for="LinkedInLink" class="form-control" />
         <span asp-validation-for="LinkedInLink" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Wage" class="control-label"></label>
-        <input asp-for="Wage" class="form-control" />
-        <span asp-validation-for="Wage" class="text-danger"></span>
     </div>
     <input type="submit" value="Отправить" />
 </form>

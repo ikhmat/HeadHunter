@@ -40,6 +40,9 @@ namespace HeadHunter.Models
         [Required]
         [Display(Name = "Desired wage")]
         public int Wage { get; set; }
+        [Required]
+        [Display(Name = "Job title")]
+        public string JobTitle { get; set; }
         public DateTime UpdateDate { get; set; }
     }
 }
