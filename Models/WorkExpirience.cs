@@ -12,5 +12,6 @@ namespace HeadHunter.Models
         public string Position { get; set; }
         public string Responsibilities { get; set; }
         public string ResumeId { get; set; }
+        public int Experience { get; set; }
     }
 }

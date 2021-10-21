@@ -3,15 +3,17 @@ using System;
 using HeadHunter.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HeadHunter.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20211021143953_NewPropInResumeEntity")]
+    partial class NewPropInResumeEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,9 +167,6 @@ namespace HeadHunter.Migrations
 
                     b.Property<string>("CompanyName")
                         .HasColumnType("text");
-
-                    b.Property<int>("Experience")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Position")
                         .HasColumnType("text");

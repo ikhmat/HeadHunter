@@ -10,39 +10,40 @@ namespace HeadHunter.Models
     {
         public string Id { get; set; }
         [Required]
-        [Display(Name = "Name")]
+        [Display(Name = "Имя")]
         public string Name { get; set; }
         [Required]
-        [Display(Name = "Surname")]
+        [Display(Name = "Фамилия")]
         public string Surname { get; set; }
         [Required]
-        [Display(Name = "Date of birth")]
+        [Display(Name = "Дата рождения")]
         public DateTime BirthDate { get; set; }
-        [Display(Name = "Category")]
+        [Display(Name = "Категория")]
         public string CategoryId { get; set; }
         [Required]
-        [Display(Name = "City of residence")]
+        [Display(Name = "Город проживания")]
         public string CityName { get; set; }
         public string Telegram { get; set; }
         [Required]
-        [Display(Name = "Phone number")]
+        [Display(Name = "Номер телефона")]
         public string PhoneNumber { get; set; }
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
-        [Display(Name = "Facebook link")]
+        [Display(Name = "Ссылка на Facebook")]
         public string FacebookLink { get; set; }
-        [Display(Name = "Linkedin link")]
+        [Display(Name = "Ссылка на Linkedin")]
         public string LinkedInLink { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
         [Required]
-        [Display(Name = "Desired wage")]
+        [Display(Name = "Заработная плата в долларах США")]
         public int Wage { get; set; }
         [Required]
-        [Display(Name = "Job title")]
+        [Display(Name = "Название должности")]
         public string JobTitle { get; set; }
         public DateTime UpdateDate { get; set; }
+        public bool Published { get; set; }
     }
 }
