@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace HeadHunter.Controllers
 {
+    [Authorize(Roles = "boss")]
     public class BossesController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -24,7 +25,6 @@ namespace HeadHunter.Controllers
             _signInManager = signInManager;
             _db = db;
         }
-        [Authorize(Roles = "boss")]
         [HttpGet]
         public IActionResult Profile()
         {
@@ -80,7 +80,6 @@ namespace HeadHunter.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "boss")]
         public async Task<IActionResult> AddVacancy(Vacancy vacancy)
         {
             if (vacancy.ExperienceFrom > vacancy.ExperienceTo && vacancy.ExperienceTo != 0)
