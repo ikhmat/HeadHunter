@@ -1,7 +1,9 @@
 ﻿using HeadHunter.Models;
+using HeadHunter.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,35 +28,46 @@ namespace HeadHunter.Controllers
         }
         public IActionResult Profile()
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
-            var resumes = _context.Resumes.Where(r => r.UserId == _userManager.GetUserId(User));
-            ViewBag.Resumes = resumes;
-            return View(user);
+            User user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+            ApplicantProfileViewModel viewModel = new ApplicantProfileViewModel
+            {
+                UserId = user.Id,
+                Email = user.Email,
+                Nickname = user.UserName,
+                Name = user.Name,
+                Surname = user.Surname,
+                PhoneNumber = user.PhoneNumber,
+                LinkImg = user.LinkImg,
+                Resumes = _context.Resumes.Where(v => v.UserId == user.Id).OrderByDescending(v => v.UpdateDate).ToList()
+            };
+            return View(viewModel);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(User formUser, IFormFile file)
+        public async Task<IActionResult> Edit(ApplicantProfileViewModel model)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == formUser.Id);
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == model.UserId);
             if (ModelState.IsValid)
             {
-                if (file != null)
+                string filename;
+                if (model.File != null)
                 {
+                    filename = model.Nickname + Path.GetExtension(model.File.FileName);
                     System.IO.File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\avatars\\" + user.LinkImg));
-                    string filename = user.UserName + Path.GetExtension(file.FileName);
+                    user.LinkImg = filename;
                     using (var stream = new FileStream(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\avatars\\" + filename), FileMode.Create))
                     {
-                        await file.CopyToAsync(stream);
+                        await model.File.CopyToAsync(stream);
                     }
-                    user.LinkImg = filename;
                 }
-                user.Email = formUser.Email;
-                user.UserName = formUser.UserName;
-                user.Surname = formUser.Surname;
-                user.Name = formUser.Name;
-                user.PhoneNumber = formUser.PhoneNumber;
+                user.Email = model.Email;
+                user.UserName = model.Nickname;
+                user.Surname = model.Surname;
+                user.Name = model.Name;
+                user.PhoneNumber = model.PhoneNumber;
                 await _context.SaveChangesAsync();
+                return RedirectToAction("Profile");
             }
-            return RedirectToAction("Profile");
+            return View(model);
         }
         [HttpGet]
         public IActionResult AddResume()
@@ -75,12 +88,22 @@ namespace HeadHunter.Controllers
             }
             return View(formResume);
         }
-        public async Task<IActionResult> UpdateResume(string resumeId)
+        public async Task<IActionResult> UpdateResume(string id)
         {
-            var resume = _context.Resumes.FirstOrDefault(r => r.Id == resumeId);
+            Resume resume = _context.Resumes.Find(id);
             resume.UpdateDate = DateTime.Now;
+            _context.Resumes.Update(resume);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Profile");
+            return Json(resume);
+        }
+
+        public async Task<IActionResult> Disagreement(string id)
+        {
+            Resume resume = _context.Resumes.Find(id);
+            resume.Published = !resume.Published;
+            _context.Resumes.Update(resume);
+            await _context.SaveChangesAsync();
+            return Json(resume);
         }
         [HttpGet]
         public IActionResult EditResume(string resumeId)
@@ -93,20 +116,8 @@ namespace HeadHunter.Controllers
         {
             if (ModelState.IsValid)
             {
-                var resume = _context.Resumes.FirstOrDefault(r => r.Id == formResume.Id);
-                resume.UpdateDate = DateTime.Now;
-                resume.Name = formResume.Name;
-                resume.Surname = formResume.Surname;
-                resume.Email = formResume.Email;
-                resume.BirthDate = formResume.BirthDate;
-                resume.CategoryId = formResume.CategoryId;
-                resume.CityName = formResume.CityName;
-                resume.Telegram = formResume.Telegram;
-                resume.LinkedInLink = formResume.LinkedInLink;
-                resume.FacebookLink = formResume.FacebookLink;
-                resume.PhoneNumber = formResume.PhoneNumber;
-                resume.Wage = formResume.Wage;
-                resume.JobTitle = formResume.JobTitle;
+                formResume.UpdateDate = DateTime.Now;
+                _context.Update(formResume);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Profile");
             }
