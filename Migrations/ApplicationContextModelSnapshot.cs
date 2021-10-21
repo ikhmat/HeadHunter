@@ -113,7 +113,11 @@ namespace HeadHunter.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
+                    b.Property<bool>("Agreement")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("CategoryVacancyId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DateOfUpdate")
@@ -129,6 +133,11 @@ namespace HeadHunter.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("text");
 
                     b.Property<int>("Wage")

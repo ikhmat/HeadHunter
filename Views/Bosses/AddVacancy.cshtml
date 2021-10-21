@@ -6,14 +6,14 @@
 
 <div class="container-sm w-50 mx-auto">
     <form asp-action="AddVacancy" class="my-5">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div asp-validation-summary="All" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Name" class="control-label">Название</label>
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Wage" class="control-label">Заработная плата</label>
+            <label asp-for="Wage" class="control-label">Заработная плата в долларах США</label>
             <input asp-for="Wage" type="number" min="1" class="form-control" />
             <span asp-validation-for="Wage" class="text-danger"></span>
         </div>
@@ -27,29 +27,37 @@
                 }
                 <option value="-1">Другая ...</option>
             </select>
+            <span asp-validation-for="CategoryVacancyId" class="text-danger"></span>
             <div id="newCategory" style="display: none;" class="my-2">
-                <input id="newCategory-text" type="text" class="form-control" placeholder="Введите название новой категории"/>
+                <input id="newCategory-text" type="text" class="form-control" placeholder="Введите название новой категории" />
                 <input type="button" value="Добавить" class="btn btn-light mt-2" onclick="AddNewCategory()" />
             </div>
         </div>
         <div class="form-group">
             <label asp-for="ExperienceFrom" class="control-label">Опыт работы</label><br />
             <span>от </span><input asp-for="ExperienceFrom" value="0" width="100" />
-            <span>до </span><input asp-for="ExperienceTo" value="0" width="100" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+            <span>до </span><input asp-for="ExperienceTo" value="0" width="100" /><br />
+            <span asp-validation-for="ExperienceFrom" class="text-danger"></span><br />
+            <span asp-validation-for="ExperienceTo" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="Description" class="control-label">Описание</label>
             <textarea asp-for="Description" class="form-control" rows="5" style="resize: none;"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
-</form>
+        <div class="form-group">
+            <input type="submit" value="Добавить" />
+        </div>
+    </form>
 </div>
 
 
 
 @section Scripts
 {
+    @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
         $('#categories').change(function () {
             console.log("Clicked!");

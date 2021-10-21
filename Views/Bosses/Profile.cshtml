@@ -1,20 +1,43 @@
 ﻿@model BossesProfileViewModel
-@{ 
+@{
     ViewBag.Tittle = "Profile";
     Layout = "_Layout";
 }
 
 <div class="row">
     <div class="col-5 text-center">
-        <img src="~/avatars/@Model.User.LinkImg" width="200" height="200" class="border border-dark rounded-circle p-2" />
+        <img src="~/avatars/@Model.LinkImg" width="200" height="200" class="border border-dark rounded-circle p-2" />
     </div>
     <div class="col-7 pt-3">
-        <p>Nickname: <b style="font-size:25px;">@Model.User.UserName</b></p>
-        <p>Surname: @Model.User.Surname</p>
-        <p>Name: @Model.User.Name</p>
-        <p>Компания: @Model.User.CompanyName</p>
-        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#EditModal">Edit</button>
+        <p>Nickname: <b style="font-size:25px;">@Model.Nickname</b></p>
+        <p>Surname: @Model.Surname</p>
+        <p>Name: @Model.Name</p>
+        <p>Компания: @Model.CompanyName</p>
+        <button type="button" class="btn btn-light border-dark" data-toggle="modal" data-target="#EditModal">Edit</button>
     </div>
+</div>
+<div class="mt-5">
+    <a asp-controller="Bosses" asp-action="AddVacancy" class="btn btn-light border-dark mb-3">Добавить ваканцию</a>
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th style="width: 50%;">Name</th>
+                <th style="width: 25%;">Update Date</th>
+                <th style="width: 25%;"></th>
+            </tr>
+        </thead>
+        @foreach (var item in Model.Vacancies)
+        {
+            <tr>
+                <td style="width: 50%;">@item.Name</td>
+                <td id="date-@item.Id" style="width: 25%;">@item.DateOfUpdate.ToUniversalTime()</td>
+                <td style="width: 25%;">
+                    <a class="btn btn-light border-dark" onclick="Update('@item.Id')">Обновить</a>
+                    <a asp-controller="Boses" asp-action="EditVacancy" class="btn btn-light border-dark" asp-route-id="@item.Id">Редактировать</a>
+                </td>
+            </tr>
+        }
+    </table>
 </div>
 
 <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="EditModalLabel" aria-hidden="true">
@@ -26,50 +49,74 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form asp-controller="Bosses" asp-action="Edit" enctype="multipart/form-data" >
+            <div class="m-3">
+                <form asp-controller="Bosses" asp-action="Edit" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="User.Id" value="@Model.User.Id" />
+                    <input type="hidden" asp-for="UserId" value="@Model.UserId" />
                     <label asp-for="File" class="control-label">Загрузка аватарки</label>
                     <input asp-for="File" type="file" class="form-control" />
                     <div class="form-group">
-                        <label asp-for="User.Email" class="control-label">Почта</label>
-                        <input asp-for="User.Email" class="form-control" />
-                        <span asp-validation-for="User.Email" class="text-danger"></span>
+                        <label asp-for="Email" class="control-label">Почта</label>
+                        <input asp-for="Email" class="form-control" value="@Model.Email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="User.UserName" class="control-label">Никнейм</label>
-                        <input asp-for="User.UserName" class="form-control" />
-                        <span asp-validation-for="User.UserName" class="text-danger"></span>
+                        <label asp-for="Nickname" class="control-label">Никнейм</label>
+                        <input asp-for="Nickname" class="form-control" value="@Model.Nickname" />
+                        <span asp-validation-for="Nickname" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="User.Surname" class="control-label">Фамилие</label>
-                        <input asp-for="User.Surname" class="form-control" />
-                        <span asp-validation-for="User.Surname" class="text-danger"></span>
+                        <label asp-for="Surname" class="control-label">Фамилие</label>
+                        <input asp-for="Surname" class="form-control" />
+                        <span asp-validation-for="Surname" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="User.Name" class="control-label">Имя</label>
-                        <input asp-for="User.Name" class="form-control" />
-                        <span asp-validation-for="User.Name" class="text-danger"></span>
+                        <label asp-for="Name" class="control-label">Имя</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="User.CompanyName" class="control-label">Компания</label>
-                        <input asp-for="User.CompanyName" class="form-control" />
-                        <span asp-validation-for="User.CompanyName" class="text-danger"></span>
+                        <label asp-for="CompanyName" class="control-label">Компания</label>
+                        <input asp-for="CompanyName" class="form-control" />
+                        <span asp-validation-for="CompanyName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber" class="control-label">Номер телефона</label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                     <button id="editModalButton" type="submit" class="btn btn-primary ml-3">Сохранить</button>
                 </form>
+
+                @section Scripts
+                {
+                    @{
+                        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                    }
+            <script>
+                        function Update(id) {
+                            $.ajax({
+                                url: '@Url.Action("UpdateVacancy", "Bosses")',
+                                type: 'POST',
+                                data: { 'id': id },
+                                success: function (data) {
+                                    console.log(data['dateOfUpdate']);
+                                    console.log('#date-' + id);
+                                    console.log(data['dateOfUpdate']);
+
+                                    let dateTime = new Date(data['dateOfUpdate']).toLocaleString()
+                                    console.log(typeof dateTime);
+                                    console.log($('#date-' + id).val());
+                                    $('#date-' + id).text(dateTime)
+                                    //$('#hide-text-' + pubId).text(data['description']);
+                                },
+                            });
+                        }
+            </script>
+                }
             </div>
         </div>
     </div>
 </div>
 
-
-
-@section Scripts
-{
-    <script>
-
-    </script>
-}
