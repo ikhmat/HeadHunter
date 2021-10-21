@@ -75,5 +75,42 @@ namespace HeadHunter.Controllers
             }
             return View(formResume);
         }
+        public async Task<IActionResult> UpdateResume(string resumeId)
+        {
+            var resume = _context.Resumes.FirstOrDefault(r => r.Id == resumeId);
+            resume.UpdateDate = DateTime.Now;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Profile");
+        }
+        [HttpGet]
+        public IActionResult EditResume(string resumeId)
+        {
+            var resume = _context.Resumes.FirstOrDefault(r => r.Id == resumeId);
+            return View(resume);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditResume(Resume formResume)
+        {
+            if (ModelState.IsValid)
+            {
+                var resume = _context.Resumes.FirstOrDefault(r => r.Id == formResume.Id);
+                resume.UpdateDate = DateTime.Now;
+                resume.Name = formResume.Name;
+                resume.Surname = formResume.Surname;
+                resume.Email = formResume.Email;
+                resume.BirthDate = formResume.BirthDate;
+                resume.CategoryId = formResume.CategoryId;
+                resume.CityName = formResume.CityName;
+                resume.Telegram = formResume.Telegram;
+                resume.LinkedInLink = formResume.LinkedInLink;
+                resume.FacebookLink = formResume.FacebookLink;
+                resume.PhoneNumber = formResume.PhoneNumber;
+                resume.Wage = formResume.Wage;
+                resume.JobTitle = formResume.JobTitle;
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Profile");
+            }
+            return View(formResume);
+        }
     }
 }
