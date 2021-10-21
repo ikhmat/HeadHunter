@@ -132,6 +132,26 @@ namespace HeadHunter.Controllers
         public IActionResult EditVacancy(string id)
         {
             Vacancy vacancy = _db.Vacancies.Find(id);
+            ViewBag.Categories = _db.CategoryVacancies.ToList();
+            return View(vacancy);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditVacancy(Vacancy vacancy)
+        {
+            if (vacancy.ExperienceFrom > vacancy.ExperienceTo && vacancy.ExperienceTo != 0)
+            {
+                ModelState.AddModelError("ExperienceTo", "Опыт работы ДО не может быть меньше ОТ");
+            }
+            if (ModelState.IsValid)
+            {
+                vacancy.UserId = _userManager.GetUserId(User);
+                vacancy.DateOfUpdate = DateTime.Now;
+                _db.Update(vacancy);
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Profile");
+            }
+            ViewBag.Categories = _db.CategoryVacancies.ToList();
             return View(vacancy);
         }
 

@@ -11,11 +11,11 @@ namespace HeadHunter.Models
         public string Id { get; set; }
         public string UserId { get; set; }
         public bool Agreement { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Не заполнено поле названия")]
         [Display(Name = "Name")]
         [StringLength(100, MinimumLength = 5, ErrorMessage = "Длина имени должна быть от 5 до 100 символов")]
         public string Name { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Не заполнено поле заработной платы")]
         [Display(Name = "Wage")]
         [Range(1, 100000)]
         public int Wage { get; set; }
@@ -24,7 +24,7 @@ namespace HeadHunter.Models
         public int ExperienceFrom { get; set; }
         [Range(0, 50)]
         public int ExperienceTo { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Не выбрана категория")]
         [Display(Name = "Category")]
         public string CategoryVacancyId { get; set; }
         public DateTime DateOfUpdate { get; set; }
