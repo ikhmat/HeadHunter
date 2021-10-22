@@ -11,6 +11,8 @@ namespace HeadHunter.Models
     {
         public DbSet<Resume> Resumes { get; set; }
         public DbSet<WorkExpirience> WorkExpiriences { get; set; }
+        public DbSet<EducationExpirience> EducationExpiriences { get; set; }
+        public DbSet<CoursesExpirience> CoursesExpiriences { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
     }
 }

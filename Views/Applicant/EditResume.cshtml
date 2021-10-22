@@ -3,69 +3,72 @@
     ViewBag.Title = Model.JobTitle;
     Layout = "_Layout";
 }
-<form asp-action="EditResume" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" value="@Model.Name" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Surname" class="control-label"></label>
-        <input asp-for="Surname" class="form-control" value="@Model.Surname" />
-        <span asp-validation-for="Surname" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Email" class="control-label"></label>
-        <input asp-for="Email" class="form-control" value="@Model.Email" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group" onclick="">
-        <label asp-for="BirthDate" class="control-label"></label>
-        <input asp-for="BirthDate" class="form-control" type="date" value="@Model.BirthDate" />
-        <span asp-validation-for="BirthDate" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="CityName" class="control-label"></label>
-        <input asp-for="CityName" class="form-control" value="@Model.CityName" />
-        <span asp-validation-for="CityName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="JobTitle" class="control-label"></label>
-        <input asp-for="JobTitle" class="form-control" value="@Model.JobTitle" />
-        <span asp-validation-for="JobTitle" class="text-danger"></span>
-    </div>
-    <div id="company" class="form-group" style="display: none;">
-        <label asp-for="CategoryId" class="control-label"></label>
-        <input asp-for="CategoryId" class="form-control" />
-        <span asp-validation-for="CategoryId" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Wage" class="control-label"></label>
-        <input asp-for="Wage" class="form-control" value="@Model.Wage" />
-        <span asp-validation-for="Wage" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="PhoneNumber" class="control-label"></label>
-        <input asp-for="PhoneNumber" class="form-control" value="@Model.PhoneNumber" />
-        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Telegram" class="control-label"></label>
-        <input asp-for="Telegram" class="form-control" value="@Model.Telegram" />
-        <span asp-validation-for="Telegram" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="FacebookLink" class="control-label"></label>
-        <input asp-for="FacebookLink" class="form-control" value="@Model.FacebookLink" />
-        <span asp-validation-for="FacebookLink" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="LinkedInLink" class="control-label"></label>
-        <input asp-for="LinkedInLink" class="form-control" value="@Model.LinkedInLink" />
-        <span asp-validation-for="LinkedInLink" class="text-danger"></span>
-    </div>
-    <input type="hidden" asp-for="Id" value="@Model.Id">
-    <input type="hidden" asp-for="UserId" value="@Model.UserId">
-    <input type="submit" value="Редактировать" />
-</form>
+
+<div class="container-sm w-50 mx-auto">
+    <form asp-action="EditResume" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" value="@Model.Name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Surname" class="control-label"></label>
+            <input asp-for="Surname" class="form-control" value="@Model.Surname" />
+            <span asp-validation-for="Surname" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control" value="@Model.Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group" onclick="">
+            <label asp-for="BirthDate" class="control-label"></label>
+            <input asp-for="BirthDate" class="form-control" type="date" value="@Model.BirthDate" />
+            <span asp-validation-for="BirthDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CityName" class="control-label"></label>
+            <input asp-for="CityName" class="form-control" value="@Model.CityName" />
+            <span asp-validation-for="CityName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="JobTitle" class="control-label"></label>
+            <input asp-for="JobTitle" class="form-control" value="@Model.JobTitle" />
+            <span asp-validation-for="JobTitle" class="text-danger"></span>
+        </div>
+        <div id="company" class="form-group" style="display: none;">
+            <label asp-for="CategoryId" class="control-label"></label>
+            <input asp-for="CategoryId" class="form-control" />
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Wage" class="control-label"></label>
+            <input asp-for="Wage" class="form-control" value="@Model.Wage" />
+            <span asp-validation-for="Wage" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhoneNumber" class="control-label"></label>
+            <input asp-for="PhoneNumber" class="form-control" value="@Model.PhoneNumber" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Telegram" class="control-label"></label>
+            <input asp-for="Telegram" class="form-control" value="@Model.Telegram" />
+            <span asp-validation-for="Telegram" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FacebookLink" class="control-label"></label>
+            <input asp-for="FacebookLink" class="form-control" value="@Model.FacebookLink" />
+            <span asp-validation-for="FacebookLink" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LinkedInLink" class="control-label"></label>
+            <input asp-for="LinkedInLink" class="form-control" value="@Model.LinkedInLink" />
+            <span asp-validation-for="LinkedInLink" class="text-danger"></span>
+        </div>
+        <input type="hidden" asp-for="Id" value="@Model.Id">
+        <input type="hidden" asp-for="UserId" value="@Model.UserId">
+        <input type="submit" value="Редактировать" />
+    </form>
+</div>

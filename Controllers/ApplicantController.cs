@@ -74,19 +74,61 @@ namespace HeadHunter.Controllers
         {
             return View();
         }
+
         [HttpPost]
-        public async Task<IActionResult> AddResume(Resume formResume)
+        public async Task<IActionResult> AddResume
+            (Resume resume, IEnumerable<WorkExpirience> works, IEnumerable<EducationExpirience> educations, 
+            IEnumerable<CoursesExpirience> courses)
         {
             if (ModelState.IsValid)
             {
-                formResume.Id = Guid.NewGuid().ToString();
-                formResume.UpdateDate = DateTime.Now;
-                formResume.UserId = _userManager.GetUserId(User);
-                _context.Resumes.Add(formResume);
+                resume.Id = Guid.NewGuid().ToString();
+                resume.UpdateDate = DateTime.Now;
+                resume.UserId = _userManager.GetUserId(User);
+                resume.Published = true;
+                _context.Resumes.Add(resume);
+                foreach (var item in works)
+                {
+                    WorkExpirience work = new WorkExpirience {
+                        Id = Guid.NewGuid().ToString(),
+                        ResumeId = resume.Id,
+                        CompanyName = item.CompanyName,
+                        Position = item.Position,
+                        DateOfReceiving = item.DateOfReceiving,
+                        DateOfEnd = item.DateOfEnd
+                    };
+                    _context.WorkExpiriences.Add(work);
+                }
+                foreach (var item in educations)
+                {
+                    EducationExpirience education = new EducationExpirience
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        ResumeId = resume.Id,
+                        InstitutionName = item.InstitutionName,
+                        Speciality = item.Speciality,
+                        DateOfReceiving = item.DateOfReceiving,
+                        DateOfEnd = item.DateOfEnd
+                    };
+                    _context.EducationExpiriences.Add(education);
+                }
+                foreach (var item in courses)
+                {
+                    CoursesExpirience course = new CoursesExpirience
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        ResumeId = resume.Id,
+                        CompanyName = item.CompanyName,
+                        Speciality = item.Speciality,
+                        DateOfReceiving = item.DateOfReceiving,
+                        DateOfEnd = item.DateOfEnd
+                    };
+                    _context.CoursesExpiriences.Add(course);
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Profile");
             }
-            return View(formResume);
+            return View(resume);
         }
         public async Task<IActionResult> UpdateResume(string id)
         {
