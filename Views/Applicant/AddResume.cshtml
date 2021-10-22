@@ -3,7 +3,8 @@
     Layout = "_Layout";
 }
 
-<div class="container-sm w-50 mx-auto">
+@*<div class="container-sm w-50 mx-auto">*@
+<div>
     <form asp-action="AddResume" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
@@ -140,9 +141,9 @@
                 <thead id="course-table">
                     <tr>
                         <th style="width: 33%;">Должность</th>
-                        <th style="width: 33%;">Организация</th>
+                        <th style="width: 30%;">Организация</th>
                         <th style="width: 16%;">Начало</th>
-                        <th style="width: 16%;">Окончание</th>
+                        <th style="width: 20%;">Окончание</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -165,7 +166,7 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
-    <script>
+<script>
         let works = [], educations = [], courses = [];
 
         function ShowNewWork() {
@@ -190,7 +191,7 @@
                 DateOfReceiving: $('#work-date-start').val(),
                 DateOfEnd: $('#work-date-end').val()
             };
-            $('#work-table tr:last').after('<tr><td>' + item.CompanyName + '</td><td>' + item.Position + '</td><td>' + item.DateOfReceiving + '</td><td>' + item.DateOfEnd + '</td><tr>');
+            $('#work-table tr:last').after('<tr id="work-' + works.length + '"><td>' + item.CompanyName + '</td><td>' + item.Position + '</td><td>' + item.DateOfReceiving + '</td><td>' + item.DateOfEnd + '<input type="button" value="✖" class="btn btn-danger float-right" onclick="DeleteWork(' + works.length + ')" /></td><tr>');
             works.push(item);
             ClearNewWork();
             $('#newWork').hide();
@@ -218,7 +219,7 @@
                 DateOfReceiving: $('#education-date-start').val(),
                 DateOfEnd: $('#education-date-end').val()
             };
-            $('#education-table tr:last').after('<tr><td>' + item.InstitutionName + '</td><td>' + item.Speciality + '</td><td>' + item.DateOfReceiving + '</td><td>' + item.DateOfEnd + '</td><tr>');
+            $('#education-table tr:last').after('<tr id="education-' + educations.length + '"><td>' + item.InstitutionName + '</td><td>' + item.Speciality + '</td><td>' + item.DateOfReceiving + '</td><td>' + item.DateOfEnd + '<input type="button" class="btn btn-danger float-right" value="✖" onclick="DeleteEducation(' + educations.length + ')" /></td><tr>');
             educations.push(item);
             ClearNewEducation();
             $('#newEducation').hide();
@@ -246,12 +247,27 @@
                 DateOfReceiving: $('#course-date-start').val(),
                 DateOfEnd: $('#course-date-end').val()
             };
-            $('#course-table tr:last').after('<tr><td>' + item.CompanyName + '</td><td>' + item.Speciality + '</td><td>' + item.DateOfReceiving + '</td><td>' + item.DateOfEnd + '</td><tr>');
+            $('#course-table tr:last').after('<tr id="cource-' + courses.length + '"><td>' + item.CompanyName + '</td><td>' + item.Speciality + '</td><td>' + item.DateOfReceiving + '</td><td>' + item.DateOfEnd + '<input type="button" class="btn btn-danger float-right" value="✖" onclick="DeleteCourse(' + courses.length + ')" /></td><tr>');
             courses.push(item);
             ClearNewCourse();
             $('#newCourse').hide();
         }
 
+    function DeleteWork(index) {
+        console.log($('#work-' + index));
+        $('#work-' + index).remove();
+        works.splice(index, 1);
+    }
+    function DeleteEducation(index) {
+        console.log($('#education-' + index));
+        $('#education-' + index).remove();
+        educations.splice(index, 1);
+    }
+    function DeleteCourse(index) {
+        console.log($('#course-' + index));
+        $('#course-' + index).remove();
+        courses.splice(index, 1);
+    }
 
 
         function SendResume() {
@@ -277,9 +293,15 @@
                     'educations': educations,
                     'courses': courses
                 },
-                success: console.log("OK"),
+                success: function (response) {
+                    console.log(response);
+                    if ("resume" in response) {
+                        console.log("Error!")
+                    }
+                    window.location.href = response.redirectToUrl;
+            },
             });
         }
 
-    </script>
+</script>
 }

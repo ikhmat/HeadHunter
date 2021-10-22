@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace HeadHunter.Controllers
 {
     public class ApplicantController : Controller
@@ -76,7 +77,7 @@ namespace HeadHunter.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddResume
+        public IActionResult AddResume
             (Resume resume, IEnumerable<WorkExpirience> works, IEnumerable<EducationExpirience> educations, 
             IEnumerable<CoursesExpirience> courses)
         {
@@ -125,10 +126,10 @@ namespace HeadHunter.Controllers
                     };
                     _context.CoursesExpiriences.Add(course);
                 }
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Profile");
+                _context.SaveChanges();
+                return Json(new { redirectToUrl = Url.Action("Profile", "Applicant") });
             }
-            return View(resume);
+            return Json(new { redirectToUrl = Url.Action("AddResume", "Applicant") });
         }
         public async Task<IActionResult> UpdateResume(string id)
         {
