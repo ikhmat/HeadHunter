@@ -28,6 +28,12 @@ namespace HeadHunter.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            if (model.Role == "boss") {
+                if (string.IsNullOrEmpty(model.CompanyName))
+                {
+                    ModelState.AddModelError("CompanyName", "Не заполнено поле компании");
+                }
+            }
             if (ModelState.IsValid)
             {
                 string filename = model.File == null ? "no-avatar.png" : model.Nickname + Path.GetExtension(model.File.FileName);
@@ -109,6 +115,22 @@ namespace HeadHunter.Controllers
         public bool CheckNickName(string nickName)
         {
             return !_userManager.Users.Any(b => b.UserName == nickName);
+        }
+        public bool CheckEmail(string email)
+        {
+            return !_userManager.Users.Any(b => b.Email == email);
+        }
+        public bool CheckNickNameAuthorize(string nickName)
+        {
+            User user = _userManager.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+            if (user.UserName == nickName) return true;
+            return !_userManager.Users.Any(b => b.UserName == nickName);
+        }
+        public bool CheckEmailAuthorize(string email)
+        {
+            User user = _userManager.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+            if (user.Email == email) return true;
+            return !_userManager.Users.Any(b => b.Email == email);
         }
     }
 }
