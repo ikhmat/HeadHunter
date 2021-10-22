@@ -24,9 +24,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Applicant" asp-action="Profile">Profile</a>
+                        </li>
                     </ul>
                     <div class="login_group">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a asp-controller="#" asp-action="#">@User.Identity.Name</a>
+                            <form method="post" asp-controller="Account" asp-action="Logout">
+                                <input type="submit" value="Выход" />
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login">Вход</a>
+                            <a asp-controller="Account" asp-action="Register">Регистрация</a>
+                        }
                     </div>
                 </div>
             </div>
