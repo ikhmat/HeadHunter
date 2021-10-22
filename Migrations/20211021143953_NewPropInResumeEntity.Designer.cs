@@ -3,71 +3,23 @@ using System;
 using HeadHunter.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace HeadHunter.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20211021143953_NewPropInResumeEntity")]
+    partial class NewPropInResumeEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-            modelBuilder.Entity("HeadHunter.Models.CoursesExpirience", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CompanyName")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("DateOfEnd")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateOfReceiving")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("ResumeId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Speciality")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CoursesExpiriences");
-                });
-
-            modelBuilder.Entity("HeadHunter.Models.EducationExpirience", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("DateOfEnd")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateOfReceiving")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("InstitutionName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ResumeId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Speciality")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EducationExpiriences");
-                });
 
             modelBuilder.Entity("HeadHunter.Models.Resume", b =>
                 {
@@ -214,17 +166,9 @@ namespace HeadHunter.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("CompanyName")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("DateOfEnd")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DateOfReceiving")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<string>("Position")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Responsibilities")

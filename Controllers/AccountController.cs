@@ -110,5 +110,21 @@ namespace HeadHunter.Controllers
         {
             return !_userManager.Users.Any(b => b.UserName == nickName);
         }
+        public bool CheckEmail(string email)
+        {
+            return !_userManager.Users.Any(b => b.Email == email);
+        }
+        public bool CheckNickNameAuthorize(string nickName)
+        {
+            User user = _userManager.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+            if (user.UserName == nickName) return true;
+            return !_userManager.Users.Any(b => b.UserName == nickName);
+        }
+        public bool CheckEmailAuthorize(string email)
+        {
+            User user = _userManager.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+            if (user.Email == email) return true;
+            return !_userManager.Users.Any(b => b.Email == email);
+        }
     }
 }

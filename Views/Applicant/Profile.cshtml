@@ -1,0 +1,154 @@
+﻿@model ApplicantProfileViewModel
+@{
+    ViewBag.Tittle = "Profile";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-5 text-center">
+        <img src="~/avatars/@Model.LinkImg" width="200" height="200" class="border border-dark rounded-circle p-2" />
+    </div>
+    <div class="col-7 pt-3">
+        <p>Nickname: <b style="font-size:25px;">@Model.Nickname</b></p>
+        <p>Surname: @Model.Surname</p>
+        <p>Name: @Model.Name</p>
+        <p>Email: @Model.Email</p>
+        <p>Phone number: @Model.PhoneNumber</p>
+        <button type="button" class="btn btn-light border-dark" data-toggle="modal" data-target="#EditModal">Edit</button>
+    </div>
+</div>
+<div class="mt-5">
+    <a asp-controller="Applicant" asp-action="AddResume" class="btn btn-light border-dark mb-3">Добавить резюме</a>
+    @if (Model.Resumes.Count > 0)
+    {
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th style="width: 50%;">Job title</th>
+                    <th style="width: 25%;">Update Date</th>
+                    <th style="width: 25%;"></th>
+                </tr>
+            </thead>
+            @foreach (var item in Model.Resumes)
+            {
+                <tr>
+                    <td style="width: 50%;">@item.JobTitle</td>
+                    <td id="date-@item.Id" style="width: 25%;">@item.UpdateDate.ToUniversalTime()</td>
+                    <td style="width: 25%;">
+                        <a class="btn btn-light border-dark" onclick="Update('@item.Id')">Обновить</a>
+                        <a asp-controller="Applicant" asp-action="EditResume" class="btn btn-light border-dark" asp-route-resumeId="@item.Id">Редактировать</a><br />
+                        @if (item.Published)
+                        {
+                            <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Снять с публикации</a>
+                        }
+                        else
+                        {
+                            <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Добавить в публикации</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <p class="text-center font-weight-bold">У вас еще нет ваканций</p>
+    }
+</div>
+
+<div id="false" class="alert alert-success position-fixed" role="alert" style="display: none; bottom: 0; right: 20px;">
+    Резюме снято с публикации
+</div>
+<div id="true" class="alert alert-success position-fixed" role="alert" style="display: none; bottom: 0; right: 20px;">
+    Резюме добавлено в публикации
+</div>
+
+
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="EditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="EditModalLabel">Редактирование</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="m-3">
+                <form asp-controller="Bosses" asp-action="Edit" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="UserId" value="@Model.UserId" />
+                    <label asp-for="File" class="control-label">Изменение аватарки</label>
+                    <input asp-for="File" type="file" class="form-control" />
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label">Почта</label>
+                        <input asp-for="Email" class="form-control" value="@Model.Email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Nickname" class="control-label">Никнейм</label>
+                        <input asp-for="Nickname" class="form-control" value="@Model.Nickname" />
+                        <span asp-validation-for="Nickname" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Surname" class="control-label">Фамилия</label>
+                        <input asp-for="Surname" class="form-control" />
+                        <span asp-validation-for="Surname" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label">Имя</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber" class="control-label">Номер телефона</label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button id="editModalButton" type="submit" class="btn btn-primary ml-3">Сохранить</button>
+                </form>
+
+                @section Scripts
+                {
+                    @{
+                        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                    }
+                    <script>
+                        function Update(id) {
+                            $.ajax({
+                                url: '@Url.Action("UpdateResume", "Applicant")',
+                                type: 'POST',
+                                data: { 'id': id },
+                                success: function (data) {
+                                    console.log(data);
+                                    let dateTime = new Date(data['updateDate']).toLocaleString();
+                                    $('#date-' + id).text(dateTime);
+                                },
+                            });
+                        }
+                        function Disagreement(id) {
+                            $.ajax({
+                                url: '@Url.Action("Disagreement", "Applicant")',
+                                type: 'POST',
+                                data: { 'id': id },
+                                success: function (data) {
+                                    console.log(data);
+                                    if (data['published'] == false) {
+                                        $('#buttonAgreement').text('Добавить в публикации');
+                                        $("#false").show();
+                                        setTimeout(function () { $("#false").hide(); }, 3000);
+                                    }
+                                    else {
+                                        $('#buttonAgreement').text('Снять с публикации');
+                                        $("#true").show();
+                                        setTimeout(function () { $("#true").hide(); }, 3000);
+                                    }
+                                },
+                            });
+                        }
+                    </script>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,307 @@
+﻿@model Resume
+@{
+    Layout = "_Layout";
+}
+
+@*<div class="container-sm w-50 mx-auto">*@
+<div>
+    <form asp-action="AddResume" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Surname" class="control-label"></label>
+            <input asp-for="Surname" class="form-control" />
+            <span asp-validation-for="Surname" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group" onclick="">
+            <label asp-for="BirthDate" class="control-label"></label>
+            <input asp-for="BirthDate" class="form-control" type="date" />
+            <span asp-validation-for="BirthDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CityName" class="control-label"></label>
+            <input asp-for="CityName" class="form-control" />
+            <span asp-validation-for="CityName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="JobTitle" class="control-label"></label>
+            <input asp-for="JobTitle" class="form-control" />
+            <span asp-validation-for="JobTitle" class="text-danger"></span>
+        </div>
+        <div id="company" class="form-group" style="display: none;">
+            <label asp-for="CategoryId" class="control-label"></label>
+            <input asp-for="CategoryId" class="form-control" />
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Wage" class="control-label"></label>
+            <input asp-for="Wage" class="form-control" />
+            <span asp-validation-for="Wage" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhoneNumber" class="control-label"></label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Telegram" class="control-label"></label>
+            <input asp-for="Telegram" class="form-control" />
+            <span asp-validation-for="Telegram" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FacebookLink" class="control-label"></label>
+            <input asp-for="FacebookLink" class="form-control" />
+            <span asp-validation-for="FacebookLink" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LinkedInLink" class="control-label"></label>
+            <input asp-for="LinkedInLink" class="form-control" />
+            <span asp-validation-for="LinkedInLink" class="text-danger"></span>
+        </div>
+
+        <div>
+            <h4 class="d-inline-block mr-3">Трудовая деятальность</h4>
+            <input type="button" class="btn btn-primary rounded-circle" value="+" onclick="ShowNewWork()" style="font-size: 20px;" />
+            <hr />
+            <div id="newWork" class="my-2" style="display: none;">
+                <input id="work-company" class="form-control" placeholder="Введите название организации" />
+                <input id="work-position" class="form-control" placeholder="Введите должность" />
+                <input id="work-date-start" type="month" class="form-control" />
+                <input id="work-date-end" type="month" class="form-control" />
+                <input type="button" value="Добавить" class="btn btn-light mt-2" onclick="AddWork()" />
+            </div>
+            <table class="table table-bordered">
+                <thead id="work-table">
+                    <tr>
+                        <th style="width: 33%;">Должность</th>
+                        <th style="width: 33%;">Организация</th>
+                        <th style="width: 16%;">Начало</th>
+                        <th style="width: 16%;">Окончание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- тут будут добавлять новые -->>
+                </tbody>
+                <tr>
+                </tr>
+
+            </table>
+        </div>
+
+        <div>
+            <h4 class="d-inline-block mr-3">Образование</h4>
+            <input type="button" class="btn btn-primary rounded-circle" value="+" onclick="ShowNewEducation()" style="font-size: 20px;" />
+            <hr />
+            <div id="newEducation" class="my-2" style="display: none;">
+                <input id="education-company" class="form-control" placeholder="Введите название организации" />
+                <input id="education-position" class="form-control" placeholder="Введите направление" />
+                <input id="education-date-start" type="month" class="form-control" />
+                <input id="education-date-end" type="month" class="form-control" />
+                <input type="button" value="Добавить" class="btn btn-light mt-2" onclick="AddEducation()" />
+            </div>
+            <table class="table table-bordered">
+                <thead id="education-table">
+                    <tr>
+                        <th style="width: 33%;">Должность</th>
+                        <th style="width: 33%;">Организация</th>
+                        <th style="width: 16%;">Начало</th>
+                        <th style="width: 16%;">Окончание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- тут будут добавлять новые -->>
+                </tbody>
+                <tr>
+                </tr>
+
+            </table>
+        </div>
+
+        <div>
+            <h4 class="d-inline-block mr-3">Курсы повышения квалификации</h4>
+            <input type="button" class="btn btn-primary rounded-circle" value="+" onclick="ShowNewCourse()" style="font-size: 20px;" />
+            <hr />
+            <div id="newCourse" class="my-2" style="display: none;">
+                <input id="course-company" class="form-control" placeholder="Введите название организации" />
+                <input id="course-position" class="form-control" placeholder="Введите направление" />
+                <input id="course-date-start" type="month" class="form-control" />
+                <input id="course-date-end" type="month" class="form-control" />
+                <input type="button" value="Добавить" class="btn btn-light mt-2" onclick="AddCourse()" />
+            </div>
+            <table class="table table-bordered">
+                <thead id="course-table">
+                    <tr>
+                        <th style="width: 33%;">Должность</th>
+                        <th style="width: 30%;">Организация</th>
+                        <th style="width: 16%;">Начало</th>
+                        <th style="width: 20%;">Окончание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- тут будут добавлять новые -->>
+                </tbody>
+                <tr>
+                </tr>
+
+            </table>
+        </div>
+
+        <input type="button" class="btn btn-light border-dark" value="Создать" onclick="SendResume()" />
+    </form>
+</div>
+
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+<script>
+        let works = [], educations = [], courses = [];
+
+        function ShowNewWork() {
+            if (!$('#newWork').is(':visible')) {
+                $('#newWork').show();
+            }
+            else {
+                ClearNewWork();
+                $('#newWork').hide();
+            }
+        }
+        function ClearNewWork() {
+            $('#work-company').val('');
+            $('#work-position').val('');
+            $('#work-date-start').val('');
+            $('#work-date-end').val('');
+        }
+        function AddWork() {
+            var item = {
+                CompanyName: $('#work-company').val(),
+                Position: $('#work-position').val(),
+                DateOfReceiving: $('#work-date-start').val(),
+                DateOfEnd: $('#work-date-end').val()
+            };
+            $('#work-table tr:last').after('<tr id="work-' + works.length + '"><td>' + item.CompanyName + '</td><td>' + item.Position + '</td><td>' + item.DateOfReceiving + '</td><td>' + item.DateOfEnd + '<input type="button" value="✖" class="btn btn-danger float-right" onclick="DeleteWork(' + works.length + ')" /></td><tr>');
+            works.push(item);
+            ClearNewWork();
+            $('#newWork').hide();
+        }
+
+        function ShowNewEducation() {
+            if (!$('#newEducation').is(':visible')) {
+                $('#newEducation').show();
+            }
+            else {
+                ClearNewWork();
+                $('#newEducation').hide();
+            }
+        }
+        function ClearNewEducation() {
+            $('#education-company').val('');
+            $('#education-position').val('');
+            $('#education-date-start').val('');
+            $('#education-date-end').val('');
+        }
+        function AddEducation() {
+            var item = {
+                InstitutionName: $('#education-company').val(),
+                Speciality: $('#education-position').val(),
+                DateOfReceiving: $('#education-date-start').val(),
+                DateOfEnd: $('#education-date-end').val()
+            };
+            $('#education-table tr:last').after('<tr id="education-' + educations.length + '"><td>' + item.InstitutionName + '</td><td>' + item.Speciality + '</td><td>' + item.DateOfReceiving + '</td><td>' + item.DateOfEnd + '<input type="button" class="btn btn-danger float-right" value="✖" onclick="DeleteEducation(' + educations.length + ')" /></td><tr>');
+            educations.push(item);
+            ClearNewEducation();
+            $('#newEducation').hide();
+        }
+
+        function ShowNewCourse() {
+            if (!$('#newCourse').is(':visible')) {
+                $('#newCourse').show();
+            }
+            else {
+                ClearNewWork();
+                $('#newCourse').hide();
+            }
+        }
+        function ClearNewCourse() {
+            $('#course-company').val('');
+            $('#course-position').val('');
+            $('#course-date-start').val('');
+            $('#course-date-end').val('');
+        }
+        function AddCourse() {
+            var item = {
+                CompanyName: $('#course-company').val(),
+                Speciality: $('#course-position').val(),
+                DateOfReceiving: $('#course-date-start').val(),
+                DateOfEnd: $('#course-date-end').val()
+            };
+            $('#course-table tr:last').after('<tr id="cource-' + courses.length + '"><td>' + item.CompanyName + '</td><td>' + item.Speciality + '</td><td>' + item.DateOfReceiving + '</td><td>' + item.DateOfEnd + '<input type="button" class="btn btn-danger float-right" value="✖" onclick="DeleteCourse(' + courses.length + ')" /></td><tr>');
+            courses.push(item);
+            ClearNewCourse();
+            $('#newCourse').hide();
+        }
+
+    function DeleteWork(index) {
+        console.log($('#work-' + index));
+        $('#work-' + index).remove();
+        works.splice(index, 1);
+    }
+    function DeleteEducation(index) {
+        console.log($('#education-' + index));
+        $('#education-' + index).remove();
+        educations.splice(index, 1);
+    }
+    function DeleteCourse(index) {
+        console.log($('#course-' + index));
+        $('#course-' + index).remove();
+        courses.splice(index, 1);
+    }
+
+
+        function SendResume() {
+            $.ajax({
+                url: '@Url.Action("AddResume", "Applicant")',
+                type: 'POST',
+                data: {
+                    'resume': {
+                        'Name': $('#Name').val(),
+                        'Surname': $('#Surname').val(),
+                        'Email': $('#Email').val(),
+                        'BirthDate': $('#BirthDate').val(),
+                        'CityName': $('#CityName').val(),
+                        'JobTitle': $('#JobTitle').val(),
+                        'CategoryId': $('#CategoryId').val(),
+                        'Wage': $('#Wage').val(),
+                        'PhoneNumber': $('#PhoneNumber').val(),
+                        'Telegram': $('#Telegram').val(),
+                        'FacebookLink': $('#FacebookLink').val(),
+                        'LinkedInLink': $('#LinkedInLink').val()
+                    },
+                    'works': works,
+                    'educations': educations,
+                    'courses': courses
+                },
+                success: function (response) {
+                    console.log(response);
+                    if ("resume" in response) {
+                        console.log("Error!")
+                    }
+                    window.location.href = response.redirectToUrl;
+            },
+            });
+        }
+
+</script>
+}
