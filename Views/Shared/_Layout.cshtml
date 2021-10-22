@@ -22,37 +22,11 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Bosses" asp-action="Profile">Profile</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        @if (User.IsInRole("boss"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Bosses" asp-action="AddVacancy">Add vacancy</a>
-                            </li>
-
-                        }
+                        
                     </ul>
                     <div class="login_group">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            @if (User.IsInRole("applicant"))
-                            {
-                                <a asp-controller="#" asp-action="#">@User.Identity.Name</a>
-                            }
-                            else
-                            {
-                                <a asp-controller="Bosses" asp-action="Profile">@User.Identity.Name</a>
-                            }
-
-                            <form method="post" asp-controller="Account" asp-action="Logout">
-                                <input type="submit" value="Выход" />
-                            </form>
-                        }
-                        else
-                        {
-                            <a asp-controller="Account" asp-action="Login">Вход</a>
-                            <a asp-controller="Account" asp-action="Register">Регистрация</a>
-                        }
                     </div>
                 </div>
             </div>
