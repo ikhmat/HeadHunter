@@ -28,6 +28,12 @@ namespace HeadHunter.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            if (model.Role == "boss") {
+                if (string.IsNullOrEmpty(model.CompanyName))
+                {
+                    ModelState.AddModelError("CompanyName", "Не заполнено поле компании");
+                }
+            }
             if (ModelState.IsValid)
             {
                 string filename = model.File == null ? "no-avatar.png" : model.Nickname + Path.GetExtension(model.File.FileName);

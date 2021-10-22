@@ -1,0 +1,87 @@
+﻿@model Vacancy
+@{
+    ViewBag.Tittle = "Add vacancy";
+    Layout = "_Layout";
+}
+
+<div class="container-sm w-50 mx-auto">
+    <form asp-action="AddVacancy" class="my-5">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label">Название</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Wage" class="control-label">Заработная плата в долларах США</label>
+            <input asp-for="Wage" type="number" min="1" class="form-control" />
+            <span asp-validation-for="Wage" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CategoryVacancyId">Категория</label>
+            <select asp-for="CategoryVacancyId" class="form-control" id="categories">
+                <option selected disabled>Выберите категорию</option>
+                @foreach (var item in ViewBag.Categories)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+                <option value="-1">Другая ...</option>
+            </select>
+            <span asp-validation-for="CategoryVacancyId" class="text-danger"></span>
+            <div id="newCategory" style="display: none;" class="my-2">
+                <input id="newCategory-text" type="text" class="form-control" placeholder="Введите название новой категории" />
+                <input type="button" value="Добавить" class="btn btn-light mt-2" onclick="AddNewCategory()" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ExperienceFrom" class="control-label">Опыт работы</label><br />
+            <span>от </span><input asp-for="ExperienceFrom" value="0" width="100" />
+            <span>до </span><input asp-for="ExperienceTo" value="0" width="100" /><br />
+            <span asp-validation-for="ExperienceFrom" class="text-danger"></span><br />
+            <span asp-validation-for="ExperienceTo" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label">Описание</label>
+            <textarea asp-for="Description" class="form-control" rows="5" style="resize: none;"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Добавить" />
+        </div>
+    </form>
+</div>
+
+
+
+@section Scripts
+{
+    @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $('#categories').change(function () {
+            console.log("Clicked!");
+            console.log($(this).val())
+            if ($(this).val() == -1) {
+                $('#newCategory').show();
+            }
+            else {
+                $('#newCategory').hide();
+            }
+        });
+
+        function AddNewCategory() {
+            $.ajax({
+                url: '@Url.Action("AddCategory", "Bosses")',
+                type: 'POST',
+                data: { 'text': $('#newCategory-text').val() },
+                success: function (data) {
+                    $('#categories option:last').before('<option value="' + data['id'] + '">' + data['name'] + '</option>');
+                    $('#newCategory-text').val('');
+                    $('#newCategory').hide();
+                    $('#categories').val(data['id']);
+                },
+            });
+        }
+    </script>
+}

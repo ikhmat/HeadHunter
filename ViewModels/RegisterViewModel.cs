@@ -9,6 +9,7 @@ namespace HeadHunter.ViewModels
     {
         [Required]
         [Display(Name = "Email")]
+        [Remote(action: "CheckEmail", controller: "Account", ErrorMessage = "Эта почта уже занята")]
         public string Email { get; set; }
 
         [Required]

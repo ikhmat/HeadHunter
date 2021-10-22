@@ -13,6 +13,11 @@ namespace HeadHunter.Models
         public DbSet<WorkExpirience> WorkExpiriences { get; set; }
         public DbSet<EducationExpirience> EducationExpiriences { get; set; }
         public DbSet<CoursesExpirience> CoursesExpiriences { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Vacancy> Vacancies { get; set; }
+        public DbSet<CategoryVacancy> CategoryVacancies { get; set; }
+
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
     }
 }
