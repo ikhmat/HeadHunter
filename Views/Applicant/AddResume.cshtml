@@ -1,4 +1,4 @@
-﻿@model Resume
+﻿@model ApplicantResumeViewModel
 @{
     Layout = "_Layout";
 }
@@ -8,71 +8,74 @@
     <form asp-action="AddResume" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+            <label asp-for="Resume.Name" class="control-label"></label>
+            <input asp-for="Resume.Name" class="form-control" />
+            <span asp-validation-for="Resume.Name" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Surname" class="control-label"></label>
-            <input asp-for="Surname" class="form-control" />
-            <span asp-validation-for="Surname" class="text-danger"></span>
+            <label asp-for="Resume.Surname" class="control-label"></label>
+            <input asp-for="Resume.Surname" class="form-control" />
+            <span asp-validation-for="Resume.Surname" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Email" class="control-label"></label>
-            <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
+            <label asp-for="Resume.Email" class="control-label"></label>
+            <input asp-for="Resume.Email" class="form-control" />
+            <span asp-validation-for="Resume.Email" class="text-danger"></span>
         </div>
         <div class="form-group" onclick="">
-            <label asp-for="BirthDate" class="control-label"></label>
-            <input asp-for="BirthDate" class="form-control" type="date" />
-            <span asp-validation-for="BirthDate" class="text-danger"></span>
+            <label asp-for="Resume.BirthDate" class="control-label"></label>
+            <input asp-for="Resume.BirthDate" class="form-control" type="date" />
+            <span asp-validation-for="Resume.BirthDate" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="CityName" class="control-label"></label>
-            <input asp-for="CityName" class="form-control" />
-            <span asp-validation-for="CityName" class="text-danger"></span>
+            <label asp-for="Resume.CityName" class="control-label"></label>
+            <input asp-for="Resume.CityName" class="form-control" />
+            <span asp-validation-for="Resume.CityName" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="JobTitle" class="control-label"></label>
-            <input asp-for="JobTitle" class="form-control" />
-            <span asp-validation-for="JobTitle" class="text-danger"></span>
+            <label asp-for="Resume.JobTitle" class="control-label"></label>
+            <input asp-for="Resume.JobTitle" class="form-control" />
+            <span asp-validation-for="Resume.JobTitle" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="CategoryId"></label>
-            <select asp-for="CategoryId" class="form-control">
+            <label asp-for="Resume.CategoryId"></label>
+            <select asp-for="Resume.CategoryId" class="form-control">
                 <option selected disabled>Выберите категорию</option>
                 @foreach (var item in ViewBag.Categories)
                 {
                     <option value="@item.Id">@item.Name</option>
                 }
             </select>
-            <span asp-validation-for="CategoryId" class="text-danger"></span>
+            <span asp-validation-for="Resume.CategoryId" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Wage" class="control-label"></label>
-            <input asp-for="Wage" class="form-control" />
-            <span asp-validation-for="Wage" class="text-danger"></span>
+            <label asp-for="Resume.Wage" class="control-label"></label>
+            <input asp-for="Resume.Wage" class="form-control" />
+            <span asp-validation-for="Resume.Wage" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="PhoneNumber" class="control-label"></label>
-            <input asp-for="PhoneNumber" class="form-control" />
-            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            <label asp-for="Resume.PhoneNumber" class="control-label"></label>
+            <input asp-for="Resume.PhoneNumber" class="form-control" />
+            <span asp-validation-for="Resume.PhoneNumber" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Telegram" class="control-label"></label>
-            <input asp-for="Telegram" class="form-control" />
-            <span asp-validation-for="Telegram" class="text-danger"></span>
+            <label asp-for="Resume.Telegram" class="control-label"></label>
+            <input asp-for="Resume.Telegram" class="form-control" />
+            <span asp-validation-for="Resume.Telegram" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="FacebookLink" class="control-label"></label>
-            <input asp-for="FacebookLink" class="form-control" />
-            <span asp-validation-for="FacebookLink" class="text-danger"></span>
+            <label asp-for="Resume.FacebookLink" class="control-label"></label>
+            <input asp-for="Resume.FacebookLink" class="form-control" />
+            <span asp-validation-for="Resume.FacebookLink" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="LinkedInLink" class="control-label"></label>
-            <input asp-for="LinkedInLink" class="form-control" />
-            <span asp-validation-for="LinkedInLink" class="text-danger"></span>
+            <label asp-for="Resume.LinkedInLink" class="control-label"></label>
+            <input asp-for="Resume.LinkedInLink" class="form-control" />
+            <span asp-validation-for="Resume.LinkedInLink" class="text-danger"></span>
         </div>
+        <input type="hidden" asp-for="Works" value="" />
+        <input type="hidden" asp-for="Educations" value="" />
+        <input type="hidden" asp-for="Courses" value="" />
 
         <div>
             <h4 class="d-inline-block mr-3">Трудовая деятальность</h4>
@@ -161,7 +164,7 @@
             </table>
         </div>
 
-        <input type="button" class="btn btn-light border-dark" value="Создать" onclick="SendResume()" />
+        <input type="submit" class="btn btn-light border-dark" value="Создать" onclick="SendResume()" />
     </form>
 </div>
 
@@ -192,6 +195,8 @@
         }
         function AddWork() {
             var item = {
+                Id: null,
+                UserId: null,
                 CompanyName: $('#work-company').val(),
                 Position: $('#work-position').val(),
                 DateOfReceiving: $('#work-date-start').val(),
@@ -275,39 +280,46 @@
         courses.splice(index, 1);
     }
 
+    $('form').submit(function () {
+        $('#Works').val(works);
+        $('#Educations').val(educations);
+        $('#Courses').val(courses);
 
-        function SendResume() {
-            $.ajax({
-                url: '@Url.Action("AddResume", "Applicant")',
-                type: 'POST',
-                data: {
-                    'resume': {
-                        'Name': $('#Name').val(),
-                        'Surname': $('#Surname').val(),
-                        'Email': $('#Email').val(),
-                        'BirthDate': $('#BirthDate').val(),
-                        'CityName': $('#CityName').val(),
-                        'JobTitle': $('#JobTitle').val(),
-                        'CategoryId': $('#CategoryId').val(),
-                        'Wage': $('#Wage').val(),
-                        'PhoneNumber': $('#PhoneNumber').val(),
-                        'Telegram': $('#Telegram').val(),
-                        'FacebookLink': $('#FacebookLink').val(),
-                        'LinkedInLink': $('#LinkedInLink').val()
-                    },
-                    'works': works,
-                    'educations': educations,
-                    'courses': courses
+    });
+
+    @*function SendResume() {
+        $.ajax({
+            url: '@Url.Action("AddResume", "Applicant")',
+            type: 'POST',
+            data: {
+                'resume': {
+                    'Name': $('#Name').val(),
+                    'Surname': $('#Surname').val(),
+                    'Email': $('#Email').val(),
+                    'BirthDate': $('#BirthDate').val(),
+                    'CityName': $('#CityName').val(),
+                    'JobTitle': $('#JobTitle').val(),
+                    'CategoryId': $('#CategoryId').val(),
+                    'Wage': $('#Wage').val(),
+                    'PhoneNumber': $('#PhoneNumber').val(),
+                    'Telegram': $('#Telegram').val(),
+                    'FacebookLink': $('#FacebookLink').val(),
+                    'LinkedInLink': $('#LinkedInLink').val()
                 },
-                success: function (response) {
-                    console.log(response);
-                    if ("resume" in response) {
-                        console.log("Error!")
-                    }
-                    window.location.href = response.redirectToUrl;
+                'works': works,
+                'educations': educations,
+                'courses': courses
             },
-            });
-        }
+            success: function (response) {
+                console.log(response);
+                if ("resume" in response) {
+                    console.log("Error!")
+                }
+                window.location.href = response.redirectToUrl;
+        },
+        });
+    }*@
+
 
 </script>
 }

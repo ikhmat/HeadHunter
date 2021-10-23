@@ -81,21 +81,20 @@ namespace HeadHunter.Controllers
 
         [HttpPost]
         public IActionResult AddResume
-            (Resume resume, IEnumerable<WorkExpirience> works, IEnumerable<EducationExpirience> educations, 
-            IEnumerable<CoursesExpirience> courses)
+            (ApplicantResumeViewModel model)
         {
             if (ModelState.IsValid)
             {
-                resume.Id = Guid.NewGuid().ToString();
-                resume.UpdateDate = DateTime.Now;
-                resume.UserId = _userManager.GetUserId(User);
-                resume.Published = true;
-                _context.Resumes.Add(resume);
-                foreach (var item in works)
+                model.Resume.Id = Guid.NewGuid().ToString();
+                model.Resume.UpdateDate = DateTime.Now;
+                model.Resume.UserId = _userManager.GetUserId(User);
+                model.Resume.Published = true;
+                _context.Resumes.Add(model.Resume);
+                foreach (var item in model.Works)
                 {
                     WorkExpirience work = new WorkExpirience {
                         Id = Guid.NewGuid().ToString(),
-                        ResumeId = resume.Id,
+                        ResumeId = model.Resume.Id,
                         CompanyName = item.CompanyName,
                         Position = item.Position,
                         DateOfReceiving = item.DateOfReceiving,
@@ -103,12 +102,12 @@ namespace HeadHunter.Controllers
                     };
                     _context.WorkExpiriences.Add(work);
                 }
-                foreach (var item in educations)
+                foreach (var item in model.Educations)
                 {
                     EducationExpirience education = new EducationExpirience
                     {
                         Id = Guid.NewGuid().ToString(),
-                        ResumeId = resume.Id,
+                        ResumeId = model.Resume.Id,
                         InstitutionName = item.InstitutionName,
                         Speciality = item.Speciality,
                         DateOfReceiving = item.DateOfReceiving,
@@ -116,12 +115,12 @@ namespace HeadHunter.Controllers
                     };
                     _context.EducationExpiriences.Add(education);
                 }
-                foreach (var item in courses)
+                foreach (var item in model.Courses)
                 {
                     CoursesExpirience course = new CoursesExpirience
                     {
                         Id = Guid.NewGuid().ToString(),
-                        ResumeId = resume.Id,
+                        ResumeId = model.Resume.Id,
                         CompanyName = item.CompanyName,
                         Speciality = item.Speciality,
                         DateOfReceiving = item.DateOfReceiving,
@@ -130,10 +129,10 @@ namespace HeadHunter.Controllers
                     _context.CoursesExpiriences.Add(course);
                 }
                 _context.SaveChanges();
-                return Json(new { redirectToUrl = Url.Action("Profile", "Applicant") });
+                return RedirectToAction("Profile");
             }
             ViewBag.Categories = _context.CategoryVacancies.ToList();
-            return Json(new { redirectToUrl = Url.Action("AddResume", "Applicant") });
+            return View(model.Resume);
         }
         public async Task<IActionResult> UpdateResume(string id)
         {
