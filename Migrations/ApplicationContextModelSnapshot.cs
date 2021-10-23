@@ -32,6 +32,119 @@ namespace HeadHunter.Migrations
                     b.ToTable("CategoryVacancies");
                 });
 
+            modelBuilder.Entity("HeadHunter.Models.CoursesExpirience", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("DateOfEnd")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateOfReceiving")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("ResumeId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Speciality")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CoursesExpiriences");
+                });
+
+            modelBuilder.Entity("HeadHunter.Models.EducationExpirience", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("DateOfEnd")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateOfReceiving")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("InstitutionName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ResumeId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Speciality")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EducationExpiriences");
+                });
+
+            modelBuilder.Entity("HeadHunter.Models.Resume", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("CategoryId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CityName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FacebookLink")
+                        .HasColumnType("text");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LinkedInLink")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Published")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Telegram")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Wage")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Resumes");
+                });
+
             modelBuilder.Entity("HeadHunter.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -146,6 +259,36 @@ namespace HeadHunter.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Vacancies");
+                });
+
+            modelBuilder.Entity("HeadHunter.Models.WorkExpirience", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("DateOfEnd")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DateOfReceiving")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Responsibilities")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ResumeId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorkExpiriences");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -276,6 +419,15 @@ namespace HeadHunter.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("HeadHunter.Models.Resume", b =>
+                {
+                    b.HasOne("HeadHunter.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
