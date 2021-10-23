@@ -171,14 +171,5 @@ namespace HeadHunter.Controllers
             ViewBag.Categories = _context.CategoryVacancies.ToList();
             return View(formResume);
         }
-        public IActionResult ResumeDetails(string resumeId)
-        {
-            var resume = _context.Resumes.Find(resumeId);
-            ViewBag.Category = _context.CategoryVacancies.Find(resume.CategoryId);
-            ViewBag.Work = _context.WorkExpiriences.Where(e => e.ResumeId == resumeId).ToList();
-            ViewBag.Education = _context.EducationExpiriences.Where(e => e.ResumeId == resumeId).ToList();
-            ViewBag.Courses = _context.CoursesExpiriences.Where(e => e.ResumeId == resumeId).ToList();
-            return View(resume);
-        }
     }
 }

@@ -16,7 +16,6 @@ namespace HeadHunter.Models
         [Required(ErrorMessage = "Не заполнено поле позиции")]
         [Display(Name = "Position")]
         public string Position { get; set; }
-        public string Responsibilities { get; set; }
         [Required(ErrorMessage = "Не заполнено поле начала работы")]
         [Display(Name = "DateOfReceiving")]
         public DateTime DateOfReceiving { get; set; }

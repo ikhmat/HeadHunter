@@ -115,9 +115,10 @@
                     }
                     <script>
                         function details(resumeId) {
-                            window.location.href = '@Url.Action("ResumeDetails","Applicant")?resumeId=' + resumeId;
+                            window.location.href = '@Url.Action("ResumeDetails","Public")?resumeId=' + resumeId;
                         }
                         function Update(id) {
+                            event.stopPropagation();
                             $.ajax({
                                 url: '@Url.Action("UpdateResume", "Applicant")',
                                 type: 'POST',
@@ -130,6 +131,7 @@
                             });
                         }
                         function Disagreement(id) {
+                            event.stopPropagation();
                             $.ajax({
                                 url: '@Url.Action("Disagreement", "Applicant")',
                                 type: 'POST',
