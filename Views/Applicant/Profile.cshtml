@@ -31,7 +31,7 @@
             </thead>
             @foreach (var item in Model.Resumes)
             {
-                <tr>
+                <tr onclick="details('@item.Id')" style="cursor:pointer;">
                     <td style="width: 50%;">@item.JobTitle</td>
                     <td id="date-@item.Id" style="width: 25%;">@item.UpdateDate.ToUniversalTime()</td>
                     <td style="width: 25%;">
@@ -52,7 +52,7 @@
     }
     else
     {
-        <p class="text-center font-weight-bold">У вас еще нет ваканций</p>
+        <p class="text-center font-weight-bold">У вас еще нет резюме</p>
     }
 </div>
 
@@ -114,6 +114,9 @@
                         await Html.RenderPartialAsync("_ValidationScriptsPartial");
                     }
                     <script>
+                        function details(resumeId) {
+                            window.location.href = '@Url.Action("ResumeDetails","Applicant")?resumeId=' + resumeId;
+                        }
                         function Update(id) {
                             $.ajax({
                                 url: '@Url.Action("UpdateResume", "Applicant")',

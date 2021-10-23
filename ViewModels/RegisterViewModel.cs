@@ -8,6 +8,7 @@ namespace HeadHunter.ViewModels
     public class RegisterViewModel
     {
         [Required]
+        [EmailAddress]
         [Display(Name = "Email")]
         [Remote(action: "CheckEmail", controller: "Account", ErrorMessage = "Эта почта уже занята")]
         public string Email { get; set; }

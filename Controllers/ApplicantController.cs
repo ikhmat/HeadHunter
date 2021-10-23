@@ -1,5 +1,6 @@
 ﻿using HeadHunter.Models;
 using HeadHunter.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace HeadHunter.Controllers
 {
+    [Authorize(Roles = "applicant")]
     public class ApplicantController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -73,6 +75,7 @@ namespace HeadHunter.Controllers
         [HttpGet]
         public IActionResult AddResume()
         {
+            ViewBag.Categories = _context.CategoryVacancies.ToList();
             return View();
         }
 
@@ -129,6 +132,7 @@ namespace HeadHunter.Controllers
                 _context.SaveChanges();
                 return Json(new { redirectToUrl = Url.Action("Profile", "Applicant") });
             }
+            ViewBag.Categories = _context.CategoryVacancies.ToList();
             return Json(new { redirectToUrl = Url.Action("AddResume", "Applicant") });
         }
         public async Task<IActionResult> UpdateResume(string id)
@@ -152,6 +156,7 @@ namespace HeadHunter.Controllers
         public IActionResult EditResume(string resumeId)
         {
             var resume = _context.Resumes.FirstOrDefault(r => r.Id == resumeId);
+            ViewBag.Categories = _context.CategoryVacancies.ToList();
             return View(resume);
         }
         [HttpPost]
@@ -164,7 +169,16 @@ namespace HeadHunter.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Profile");
             }
+            ViewBag.Categories = _context.CategoryVacancies.ToList();
             return View(formResume);
+        }
+        public IActionResult ResumeDetails(string resumeId)
+        {
+            var resume = _context.Resumes.Find(resumeId);
+            ViewBag.Work = _context.WorkExpiriences.Where(e => e.ResumeId == resumeId).ToList();
+            ViewBag.Education = _context.EducationExpiriences.Where(e => e.ResumeId == resumeId).ToList();
+            ViewBag.Courses = _context.CoursesExpiriences.Where(e => e.ResumeId == resumeId).ToList();
+            return View(resume);
         }
     }
 }
