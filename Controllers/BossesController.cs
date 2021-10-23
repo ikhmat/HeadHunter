@@ -75,7 +75,9 @@ namespace HeadHunter.Controllers
         [HttpGet]
         public IActionResult AddVacancy()
         {
-            ViewBag.Categories = _db.CategoryVacancies.ToList();
+            List<CategoryVacancy> categories = _db.CategoryVacancies.ToList();
+            categories.Remove(categories.FirstOrDefault(c => c.Id == "default"));
+            ViewBag.Categories = categories;
             return View();
         }
 
@@ -96,7 +98,10 @@ namespace HeadHunter.Controllers
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Profile");
             }
-            ViewBag.Categories = _db.CategoryVacancies.ToList();
+            List<CategoryVacancy> categories = _db.CategoryVacancies.ToList();
+            categories.Remove(categories.FirstOrDefault(c => c.Id == "default"));
+            ViewBag.Categories = categories;
+
             return View(vacancy);
             
         }

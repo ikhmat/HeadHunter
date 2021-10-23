@@ -10,6 +10,7 @@ namespace HeadHunter.Models
     {
         public string Id { get; set; }
         public string UserId { get; set; }
+        public User User { get; set; }
         public bool Agreement { get; set; }
         [Required(ErrorMessage = "Не заполнено поле названия")]
         [Display(Name = "Name")]
