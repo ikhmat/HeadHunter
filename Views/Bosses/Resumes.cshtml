@@ -1,0 +1,36 @@
+﻿@model List<Resume>
+@{
+    ViewBag.Tittle = "Resumes";
+    Layout = "_Layout";
+}
+@if (Model.Count > 0)
+{
+    <div class="resumes">
+        @foreach (var item in Model)
+        {
+            <div class="card" onclick="details('@item.Id')" style="cursor:pointer;">
+                <div class="card-body">
+                    <div>
+                        <p class="float-right" style="font-size: 20px;">from @item.Wage $</p>
+                        <h5 class="card-title">@item.JobTitle</h5>      
+                        <p>@item.User.Name @item.User.Surname</p>
+                        <button type="button" class="btn btn-primary">Send Message</button>
+                    </div>
+                    <p class="card-text"><small class="text-muted">Last updated @item.UpdateDate</small></p>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p class="text-center font-weight-bold">Опубликованных резюме еще нет</p>
+}
+@section Scripts
+{
+    <script>
+        function details(resumeId) {
+            window.location.href = '@Url.Action("ResumeDetails","Public")?resumeId=' + resumeId;
+        }
+    </script>
+}

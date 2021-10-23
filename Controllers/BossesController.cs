@@ -153,6 +153,10 @@ namespace HeadHunter.Controllers
             ViewBag.Categories = _db.CategoryVacancies.ToList();
             return View(vacancy);
         }
-
+        public IActionResult Resumes()
+        {
+            var resumes = _db.Resumes.Include(r => r.User).Where(r => r.Published == true);
+            return View(resumes.ToList());
+        }
     }
 }
