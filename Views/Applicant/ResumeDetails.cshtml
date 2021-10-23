@@ -13,7 +13,7 @@
             <p>Дата рождения: @Model.BirthDate.ToString("dd.MM.yyyy")</p>
             <p>Город проживания: @Model.CityName</p>
             <p>Название должности: @Model.JobTitle</p>
-            <p>Категория: @ViewBag.Category</p>
+            <p>Категория: @ViewBag.Category.Name</p>
             <p>Желаемая заработная плата в долларах США: @Model.Wage</p>
             @if (ViewBag.Work.Count != 0)
             {
