@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace HeadHunter.ViewModels
 {
-    public class ResumesListViewModel
+    public class PublicationsViewModel
     {
         public IEnumerable<Resume> Resumes { get; set; }
+        public IEnumerable<Vacancy> Vacancies { get; set; }
         public string CategoryId { get; set; }
     }
 }

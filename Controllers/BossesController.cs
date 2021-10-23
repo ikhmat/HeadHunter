@@ -158,20 +158,6 @@ namespace HeadHunter.Controllers
             ViewBag.Categories = _db.CategoryVacancies.ToList();
             return View(vacancy);
         }
-        public IActionResult Resumes(string categoryId)
-        {
-            var resumes = _db.Resumes.Include(r => r.User).Where(r => r.Published == true);
-            if (!String.IsNullOrEmpty(categoryId))
-            {
-                resumes = resumes.Where(p => p.CategoryId.Contains(categoryId));
-            }
-            ResumesListViewModel rlvm = new ResumesListViewModel()
-            {
-                Resumes = resumes,
-                CategoryId = categoryId
-            };
-            ViewBag.Categories = _db.CategoryVacancies.ToList();
-            return View(rlvm);
-        }
+        
     }
 }
