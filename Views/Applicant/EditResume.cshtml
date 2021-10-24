@@ -1,86 +1,356 @@
 ﻿@model Resume
 @{
-    ViewBag.Title = Model.JobTitle;
     Layout = "_Layout";
 }
 
-<div class="container-sm w-50 mx-auto">
+<div>
     <form asp-action="EditResume" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div id="validations" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" value="@Model.Id" />
+        <input type="hidden" asp-for="UserId" value="@Model.UserId" />
         <div class="form-group">
             <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control" value="@Model.Name" />
+            <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="Surname" class="control-label"></label>
-            <input asp-for="Surname" class="form-control" value="@Model.Surname" />
+            <input asp-for="Surname" class="form-control" />
             <span asp-validation-for="Surname" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="Email" class="control-label"></label>
-            <input asp-for="Email" class="form-control" value="@Model.Email" />
+            <input asp-for="Email" class="form-control" />
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="form-group" onclick="">
             <label asp-for="BirthDate" class="control-label"></label>
-            <input asp-for="BirthDate" class="form-control" type="date" value="@Model.BirthDate" />
+            <input asp-for="BirthDate" class="form-control" type="date" />
             <span asp-validation-for="BirthDate" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="CityName" class="control-label"></label>
-            <input asp-for="CityName" class="form-control" value="@Model.CityName" />
+            <input asp-for="CityName" class="form-control" />
             <span asp-validation-for="CityName" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="JobTitle" class="control-label"></label>
-            <input asp-for="JobTitle" class="form-control" value="@Model.JobTitle" />
+            <input asp-for="JobTitle" class="form-control" />
             <span asp-validation-for="JobTitle" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="CategoryId"></label>
+            <label asp-for="CategoryId" class="control-label"></label>
             <select asp-for="CategoryId" class="form-control">
+                <option selected disabled>Выберите категорию</option>
                 @foreach (var item in ViewBag.Categories)
                 {
-                    @if (Model.CategoryId == item.Id)
-                    {
-                        <option selected value="@item.Id">@item.Name</option>
-                    }
-                    else
-                    {
-                        <option value="@item.Id">@item.Name</option>
-                    }
+                    <option value="@item.Id">@item.Name</option>
                 }
             </select>
             <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>
+        <div id="company" class="form-group" style="display: none;">
+            <label asp-for="CategoryId" class="control-label"></label>
+            <input asp-for="CategoryId" class="form-control" />
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
         <div class="form-group">
             <label asp-for="Wage" class="control-label"></label>
-            <input asp-for="Wage" class="form-control" value="@Model.Wage" />
+            <input asp-for="Wage" class="form-control" />
             <span asp-validation-for="Wage" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="PhoneNumber" class="control-label"></label>
-            <input asp-for="PhoneNumber" class="form-control" value="@Model.PhoneNumber" />
+            <input asp-for="PhoneNumber" class="form-control" />
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="Telegram" class="control-label"></label>
-            <input asp-for="Telegram" class="form-control" value="@Model.Telegram" />
+            <input asp-for="Telegram" class="form-control" />
             <span asp-validation-for="Telegram" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="FacebookLink" class="control-label"></label>
-            <input asp-for="FacebookLink" class="form-control" value="@Model.FacebookLink" />
+            <input asp-for="FacebookLink" class="form-control" />
             <span asp-validation-for="FacebookLink" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="LinkedInLink" class="control-label"></label>
-            <input asp-for="LinkedInLink" class="form-control" value="@Model.LinkedInLink" />
+            <input asp-for="LinkedInLink" class="form-control" />
             <span asp-validation-for="LinkedInLink" class="text-danger"></span>
         </div>
-        <input type="hidden" asp-for="Id" value="@Model.Id">
-        <input type="hidden" asp-for="UserId" value="@Model.UserId">
-        <input type="submit" value="Редактировать" />
+        <div>
+            <h4 class="d-inline-block mr-3">Трудовая деятальность</h4>
+            <input type="button" class="btn btn-primary rounded-circle" value="+" onclick="ShowNewWork()" style="font-size: 20px;" />
+            <hr />
+            <div id="newWork" class="my-2" style="display: none;">
+                <input id="work-company" class="form-control" placeholder="Введите название организации" />
+                <input id="work-position" class="form-control" placeholder="Введите должность" />
+                <input id="work-date-start" type="month" class="form-control" />
+                <input id="work-date-end" type="month" class="form-control" />
+                <input type="button" value="Добавить" class="btn btn-light mt-2" onclick="AddWork()" />
+            </div>
+            <table class="table table-bordered" id="work-table">
+                <thead>
+                    <tr>
+                        <th style="width: 33%;">Должность</th>
+                        <th style="width: 33%;">Организация</th>
+                        <th style="width: 16%;">Начало</th>
+                        <th style="width: 16%;">Окончание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.Works)
+                    {
+                        <tr>
+                            <td style="display:none;">@item.Id</td>
+                            <td>@item.CompanyName</td>
+                            <td>@item.Position</td>
+                            <td>@item.DateOfReceiving.ToString("yyyy-MM")</td>
+                            <td>@item.DateOfEnd.ToString("yyyy-MM")<input type="button" class="btn btn-danger float-right" value="✖" onclick="Delete(this)" /></td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+        <div>
+            <h4 class="d-inline-block mr-3">Образование</h4>
+            <input type="button" class="btn btn-primary rounded-circle" value="+" onclick="ShowNewEducation()" style="font-size: 20px;" />
+            <hr />
+            <div id="newEducation" class="my-2" style="display: none;">
+                <input id="education-company" class="form-control" placeholder="Введите название организации" />
+                <input id="education-position" class="form-control" placeholder="Введите направление" />
+                <input id="education-date-start" type="month" class="form-control" />
+                <input id="education-date-end" type="month" class="form-control" />
+                <input type="button" value="Добавить" class="btn btn-light mt-2" onclick="AddEducation()" />
+            </div>
+            <table class="table table-bordered" id="education-table">
+                <thead>
+                    <tr>
+                        <th style="width: 33%;">Должность</th>
+                        <th style="width: 33%;">Организация</th>
+                        <th style="width: 16%;">Начало</th>
+                        <th style="width: 16%;">Окончание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.Educations)
+                    {
+                        <tr>
+                            <td style="display:none;">@item.Id</td>
+                            <td>@item.InstitutionName</td>
+                            <td>@item.Speciality</td>
+                            <td>@item.DateOfReceiving.ToString("yyyy-MM")</td>
+                            <td>@item.DateOfEnd.ToString("yyyy-MM")<input type="button" class="btn btn-danger float-right" value="✖" onclick="Delete(this)" /></td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+        <div>
+            <h4 class="d-inline-block mr-3">Курсы повышения квалификации</h4>
+            <input type="button" class="btn btn-primary rounded-circle" value="+" onclick="ShowNewCourse()" style="font-size: 20px;" />
+            <hr />
+            <div id="newCourse" class="my-2" style="display: none;">
+                <input id="course-company" class="form-control" placeholder="Введите название организации" />
+                <input id="course-position" class="form-control" placeholder="Введите направление" />
+                <input id="course-date-start" type="month" class="form-control" />
+                <input id="course-date-end" type="month" class="form-control" />
+                <input type="button" value="Добавить" class="btn btn-light mt-2" onclick="AddCourse()" />
+            </div>
+            <table class="table table-bordered" id="course-table">
+                <thead>
+                    <tr>
+                        <th style="width: 33%;">Должность</th>
+                        <th style="width: 30%;">Организация</th>
+                        <th style="width: 16%;">Начало</th>
+                        <th style="width: 20%;">Окончание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.Courses)
+                    {
+                        <tr>
+                            <td style="display:none;">@item.Id</td>
+                            <td>@item.CompanyName</td>
+                            <td>@item.Speciality</td>
+                            <td>@item.DateOfReceiving.ToString("yyyy-MM")</td>
+                            <td>@item.DateOfEnd.ToString("yyyy-MM")<input type="button" class="btn btn-danger float-right" value="✖" onclick="Delete(this)" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <input type="button" class="btn btn-light border-dark" value="Редактировать" onclick="EditResume()" />
     </form>
 </div>
+
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+<script>
+    function ShowNewWork() {
+        if (!$('#newWork').is(':visible')) {
+            $('#newWork').show();
+        }
+        else {
+            ClearNewWork();
+            $('#newWork').hide();
+        }
+    }
+    function ClearNewWork() {
+        $('#work-company').val('');
+        $('#work-position').val('');
+        $('#work-date-start').val('');
+        $('#work-date-end').val('');
+    }
+    function AddWork() {
+        $('#work-table tbody').append('<tr><td style="display:none;"></td><td>' + $('#work-company').val() +
+            '</td><td>' + $('#work-position').val() +
+            '</td><td>' + $('#work-date-start').val() + '</td><td>' + $('#work-date-end').val() +
+            '<input type="button" value="✖" class="btn btn-danger float-right" onclick="Delete(this)" /></td></tr>');
+        ClearNewWork();
+        $('#newWork').hide();
+    }
+
+    function ShowNewEducation() {
+        if (!$('#newEducation').is(':visible')) {
+            $('#newEducation').show();
+        }
+        else {
+            ClearNewEducation();
+            $('#newEducation').hide();
+        }
+    }
+    function ClearNewEducation() {
+        $('#education-company').val('');
+        $('#education-position').val('');
+        $('#education-date-start').val('');
+        $('#education-date-end').val('');
+    }
+    function AddEducation() {
+        $('#education-table tbody').append('<tr><td style="display:none;"></td><td>' + $('#education-company').val() +
+            '</td><td>' + $('#education-position').val() +
+            '</td><td>' + $('#education-date-start').val() + '</td><td>' + $('#education-date-end').val() +
+            '<input type="button" class="btn btn-danger float-right" value="✖" onclick="Delete(this)" /></td></tr>');
+        ClearNewEducation();
+        $('#newEducation').hide();
+    }
+
+    function ShowNewCourse() {
+        if (!$('#newCourse').is(':visible')) {
+            $('#newCourse').show();
+        }
+        else {
+            ClearNewCourse();
+            $('#newCourse').hide();
+        }
+    }
+    function ClearNewCourse() {
+        $('#course-company').val('');
+        $('#course-position').val('');
+        $('#course-date-start').val('');
+        $('#course-date-end').val('');
+    }
+    function AddCourse() {
+        $('#course-table tbody').append('<tr><td style="display:none;"></td><td>' + $('#course-company').val() +
+            '</td><td>' + $('#course-position').val() +
+            '</td><td>' + $('#course-date-start').val() + '</td><td>' + $('#course-date-end').val() +
+            '<input type="button" class="btn btn-danger float-right" value="✖" onclick="Delete(this)" /></td></tr>');
+        ClearNewCourse();
+        $('#newCourse').hide();
+    }
+
+    function Delete(a) {
+        $(a).closest('tr').remove()
+    }
+
+    function EditResume() {
+        var works = [], educations = [], courses = [];
+
+        $('#work-table tbody tr').each(function (index) {
+            works.push({
+                Id: $(this).find('td').eq(0).text(),
+                CompanyName: $(this).find('td').eq(1).text(),
+                Position: $(this).find('td').eq(2).text(),
+                DateOfReceiving: $(this).find('td').eq(3).text(),
+                DateOfEnd: $(this).find('td').eq(4).text()
+            });
+        });
+        $('#education-table tbody tr').each(function (index) {
+            educations.push({
+                Id: $(this).find('td').eq(0).text(),
+                InstitutionName: $(this).find('td').eq(1).text(),
+                Speciality: $(this).find('td').eq(2).text(),
+                DateOfReceiving: $(this).find('td').eq(3).text(),
+                DateOfEnd: $(this).find('td').eq(4).text()
+            });
+        });
+        $('#course-table tbody tr').each(function (index) {
+            courses.push({
+                Id: $(this).find('td').eq(0).text(),
+                CompanyName: $(this).find('td').eq(1).text(),
+                Speciality: $(this).find('td').eq(2).text(),
+                DateOfReceiving: $(this).find('td').eq(3).text(),
+                DateOfEnd: $(this).find('td').eq(4).text()
+            });
+        });
+
+        $.ajax({
+            url: '@Url.Action("EditResume", "Applicant")',
+            type: 'POST',
+            data: {
+                'resume': {
+                    'Id': $('#Id').val(),
+                    'UserId': $('#UserId').val(),
+                    'Name': $('#Name').val(),
+                    'Surname': $('#Surname').val(),
+                    'Email': $('#Email').val(),
+                    'BirthDate': $('#BirthDate').val(),
+                    'CityName': $('#CityName').val(),
+                    'JobTitle': $('#JobTitle').val(),
+                    'CategoryId': $('#CategoryId').val(),
+                    'Wage': $('#Wage').val(),
+                    'PhoneNumber': $('#PhoneNumber').val(),
+                    'Telegram': $('#Telegram').val(),
+                    'FacebookLink': $('#FacebookLink').val(),
+                    'LinkedInLink': $('#LinkedInLink').val()
+                },
+                'works': works,
+                'educations': educations,
+                'courses': courses
+            },
+            success: function (response) {
+                $('#validations').empty();
+                console.log(response);
+                if (response.success) {
+                    console.log("OK");
+                    window.location.href = response.redirectToUrl;
+                }
+                else {
+                    console.log("error");
+                    for (var i = 0; i < response.data.length; i++) {
+                        var item = response.data[i];
+                        var k = item.key;
+                        var v = item.errors.join("\n");
+                        console.log(k + " " + v);
+                        $('#validations').append('<p>   •  ' + v + '</p>')
+                    }
+                    $('body,html').animate({ scrollTop: 0 }, 400);
+                }
+            },
+        });
+    }
+
+
+</script>
+}

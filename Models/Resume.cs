@@ -18,6 +18,7 @@ namespace HeadHunter.Models
         [Required]
         [Display(Name = "Дата рождения")]
         public DateTime BirthDate { get; set; }
+        [Required]
         [Display(Name = "Категория")]
         public string CategoryId { get; set; }
         [Required]

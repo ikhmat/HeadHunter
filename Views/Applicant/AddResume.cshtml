@@ -3,10 +3,9 @@
     Layout = "_Layout";
 }
 
-@*<div class="container-sm w-50 mx-auto">*@
 <div>
     <form asp-action="AddResume" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div id="validations" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Name" class="control-label"></label>
             <input asp-for="Name" class="form-control" />
@@ -38,7 +37,7 @@
             <span asp-validation-for="JobTitle" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="CategoryId"></label>
+            <label asp-for="CategoryId" class="control-label"></label>
             <select asp-for="CategoryId" class="form-control">
                 <option selected disabled>Выберите категорию</option>
                 @foreach (var item in ViewBag.Categories)
@@ -46,6 +45,11 @@
                     <option value="@item.Id">@item.Name</option>
                 }
             </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+        <div id="company" class="form-group" style="display: none;">
+            <label asp-for="CategoryId" class="control-label"></label>
+            <input asp-for="CategoryId" class="form-control" />
             <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>
         <div class="form-group">
@@ -73,7 +77,6 @@
             <input asp-for="LinkedInLink" class="form-control" />
             <span asp-validation-for="LinkedInLink" class="text-danger"></span>
         </div>
-
         <div>
             <h4 class="d-inline-block mr-3">Трудовая деятальность</h4>
             <input type="button" class="btn btn-primary rounded-circle" value="+" onclick="ShowNewWork()" style="font-size: 20px;" />
@@ -85,8 +88,8 @@
                 <input id="work-date-end" type="month" class="form-control" />
                 <input type="button" value="Добавить" class="btn btn-light mt-2" onclick="AddWork()" />
             </div>
-            <table class="table table-bordered">
-                <thead id="work-table">
+            <table class="table table-bordered" id="work-table">
+                <thead>
                     <tr>
                         <th style="width: 33%;">Должность</th>
                         <th style="width: 33%;">Организация</th>
@@ -95,10 +98,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- тут будут добавлять новые -->>
+                    <!-- тут будут добавлять новые -->
                 </tbody>
-                <tr>
-                </tr>
 
             </table>
         </div>
@@ -114,8 +115,8 @@
                 <input id="education-date-end" type="month" class="form-control" />
                 <input type="button" value="Добавить" class="btn btn-light mt-2" onclick="AddEducation()" />
             </div>
-            <table class="table table-bordered">
-                <thead id="education-table">
+            <table class="table table-bordered" id="education-table">
+                <thead>
                     <tr>
                         <th style="width: 33%;">Должность</th>
                         <th style="width: 33%;">Организация</th>
@@ -124,10 +125,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- тут будут добавлять новые -->>
+                    <!-- тут будут добавлять новые -->
                 </tbody>
-                <tr>
-                </tr>
 
             </table>
         </div>
@@ -143,8 +142,8 @@
                 <input id="course-date-end" type="month" class="form-control" />
                 <input type="button" value="Добавить" class="btn btn-light mt-2" onclick="AddCourse()" />
             </div>
-            <table class="table table-bordered">
-                <thead id="course-table">
+            <table class="table table-bordered" id="course-table">
+                <thead>
                     <tr>
                         <th style="width: 33%;">Должность</th>
                         <th style="width: 30%;">Организация</th>
@@ -153,11 +152,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- тут будут добавлять новые -->>
+                    <!-- тут будут добавлять новые -->
                 </tbody>
-                <tr>
-                </tr>
-
             </table>
         </div>
 
@@ -173,141 +169,154 @@
     }
 
 <script>
-        let works = [], educations = [], courses = [];
-
-        function ShowNewWork() {
-            if (!$('#newWork').is(':visible')) {
-                $('#newWork').show();
-            }
-            else {
-                ClearNewWork();
-                $('#newWork').hide();
-            }
+    function ShowNewWork() {
+        if (!$('#newWork').is(':visible')) {
+            $('#newWork').show();
         }
-        function ClearNewWork() {
-            $('#work-company').val('');
-            $('#work-position').val('');
-            $('#work-date-start').val('');
-            $('#work-date-end').val('');
-        }
-        function AddWork() {
-            var item = {
-                CompanyName: $('#work-company').val(),
-                Position: $('#work-position').val(),
-                DateOfReceiving: $('#work-date-start').val(),
-                DateOfEnd: $('#work-date-end').val()
-            };
-            $('#work-table tr:last').after('<tr id="work-' + works.length + '"><td>' + item.CompanyName + '</td><td>' + item.Position + '</td><td>' + item.DateOfReceiving + '</td><td>' + item.DateOfEnd + '<input type="button" value="✖" class="btn btn-danger float-right" onclick="DeleteWork(' + works.length + ')" /></td><tr>');
-            works.push(item);
+        else {
             ClearNewWork();
             $('#newWork').hide();
         }
+    }
+    function ClearNewWork() {
+        $('#work-company').val('');
+        $('#work-position').val('');
+        $('#work-date-start').val('');
+        $('#work-date-end').val('');
+    }
+    function AddWork() {
+        $('#work-table tbody').append('<tr><td>' + $('#work-company').val() +
+            '</td><td>' + $('#work-position').val() +
+            '</td><td>' + $('#work-date-start').val() + '</td><td>' + $('#work-date-end').val() +
+            '<input type="button" value="✖" class="btn btn-danger float-right" onclick="Delete(this)" /></td></tr>');
+        ClearNewWork();
+        $('#newWork').hide();
+    }
 
-        function ShowNewEducation() {
-            if (!$('#newEducation').is(':visible')) {
-                $('#newEducation').show();
-            }
-            else {
-                ClearNewWork();
-                $('#newEducation').hide();
-            }
+    function ShowNewEducation() {
+        if (!$('#newEducation').is(':visible')) {
+            $('#newEducation').show();
         }
-        function ClearNewEducation() {
-            $('#education-company').val('');
-            $('#education-position').val('');
-            $('#education-date-start').val('');
-            $('#education-date-end').val('');
-        }
-        function AddEducation() {
-            var item = {
-                InstitutionName: $('#education-company').val(),
-                Speciality: $('#education-position').val(),
-                DateOfReceiving: $('#education-date-start').val(),
-                DateOfEnd: $('#education-date-end').val()
-            };
-            $('#education-table tr:last').after('<tr id="education-' + educations.length + '"><td>' + item.InstitutionName + '</td><td>' + item.Speciality + '</td><td>' + item.DateOfReceiving + '</td><td>' + item.DateOfEnd + '<input type="button" class="btn btn-danger float-right" value="✖" onclick="DeleteEducation(' + educations.length + ')" /></td><tr>');
-            educations.push(item);
+        else {
             ClearNewEducation();
             $('#newEducation').hide();
         }
+    }
+    function ClearNewEducation() {
+        $('#education-company').val('');
+        $('#education-position').val('');
+        $('#education-date-start').val('');
+        $('#education-date-end').val('');
+    }
+    function AddEducation() {
+        $('#education-table tbody').append('<tr><td>' + $('#education-company').val() +
+            '</td><td>' + $('#education-position').val() +
+            '</td><td>' + $('#education-date-start').val() + '</td><td>' + $('#education-date-end').val() +
+            '<input type="button" class="btn btn-danger float-right" value="✖" onclick="Delete(this)" /></td></tr>');
+        ClearNewEducation();
+        $('#newEducation').hide();
+    }
 
-        function ShowNewCourse() {
-            if (!$('#newCourse').is(':visible')) {
-                $('#newCourse').show();
-            }
-            else {
-                ClearNewWork();
-                $('#newCourse').hide();
-            }
+    function ShowNewCourse() {
+        if (!$('#newCourse').is(':visible')) {
+            $('#newCourse').show();
         }
-        function ClearNewCourse() {
-            $('#course-company').val('');
-            $('#course-position').val('');
-            $('#course-date-start').val('');
-            $('#course-date-end').val('');
-        }
-        function AddCourse() {
-            var item = {
-                CompanyName: $('#course-company').val(),
-                Speciality: $('#course-position').val(),
-                DateOfReceiving: $('#course-date-start').val(),
-                DateOfEnd: $('#course-date-end').val()
-            };
-            $('#course-table tr:last').after('<tr id="cource-' + courses.length + '"><td>' + item.CompanyName + '</td><td>' + item.Speciality + '</td><td>' + item.DateOfReceiving + '</td><td>' + item.DateOfEnd + '<input type="button" class="btn btn-danger float-right" value="✖" onclick="DeleteCourse(' + courses.length + ')" /></td><tr>');
-            courses.push(item);
+        else {
             ClearNewCourse();
             $('#newCourse').hide();
         }
-
-    function DeleteWork(index) {
-        console.log($('#work-' + index));
-        $('#work-' + index).remove();
-        works.splice(index, 1);
     }
-    function DeleteEducation(index) {
-        console.log($('#education-' + index));
-        $('#education-' + index).remove();
-        educations.splice(index, 1);
+    function ClearNewCourse() {
+        $('#course-company').val('');
+        $('#course-position').val('');
+        $('#course-date-start').val('');
+        $('#course-date-end').val('');
     }
-    function DeleteCourse(index) {
-        console.log($('#course-' + index));
-        $('#course-' + index).remove();
-        courses.splice(index, 1);
+    function AddCourse() {
+        $('#course-table tbody').append('<tr><td>' + $('#course-company').val() +
+            '</td><td>' + $('#course-position').val() +
+            '</td><td>' + $('#course-date-start').val() + '</td><td>' + $('#course-date-end').val() +
+            '<input type="button" class="btn btn-danger float-right" value="✖" onclick="Delete(this)" /></td></tr>');
+        ClearNewCourse();
+        $('#newCourse').hide();
     }
 
+    function Delete(a) {
+        $(a).closest('tr').remove()
+    }
 
-        function SendResume() {
-            $.ajax({
-                url: '@Url.Action("AddResume", "Applicant")',
-                type: 'POST',
-                data: {
-                    'resume': {
-                        'Name': $('#Name').val(),
-                        'Surname': $('#Surname').val(),
-                        'Email': $('#Email').val(),
-                        'BirthDate': $('#BirthDate').val(),
-                        'CityName': $('#CityName').val(),
-                        'JobTitle': $('#JobTitle').val(),
-                        'CategoryId': $('#CategoryId').val(),
-                        'Wage': $('#Wage').val(),
-                        'PhoneNumber': $('#PhoneNumber').val(),
-                        'Telegram': $('#Telegram').val(),
-                        'FacebookLink': $('#FacebookLink').val(),
-                        'LinkedInLink': $('#LinkedInLink').val()
-                    },
-                    'works': works,
-                    'educations': educations,
-                    'courses': courses
-                },
-                success: function (response) {
-                    console.log(response);
-                    if ("resume" in response) {
-                        console.log("Error!")
-                    }
-                    window.location.href = response.redirectToUrl;
-            },
+    function SendResume() {
+        var works = [], educations = [], courses = [];
+
+        $('#work-table tbody tr').each(function (index) {
+            works.push({
+                CompanyName: $(this).find('td').eq(0).text(),
+                Position: $(this).find('td').eq(1).text(),
+                DateOfReceiving: $(this).find('td').eq(2).text(),
+                DateOfEnd: $(this).find('td').eq(3).text()
             });
-        }
+        });
+        $('#education-table tbody tr').each(function (index) {
+            educations.push({
+                InstitutionName: $(this).find('td').eq(0).text(),
+                Speciality: $(this).find('td').eq(1).text(),
+                DateOfReceiving: $(this).find('td').eq(2).text(),
+                DateOfEnd: $(this).find('td').eq(3).text()
+            });
+        });
+        $('#course-table tbody tr').each(function (index) {
+            courses.push({
+                CompanyName: $(this).find('td').eq(0).text(),
+                Speciality: $(this).find('td').eq(1).text(),
+                DateOfReceiving: $(this).find('td').eq(2).text(),
+                DateOfEnd: $(this).find('td').eq(3).text()
+            });
+        });
+
+        $.ajax({
+            url: '@Url.Action("AddResume", "Applicant")',
+            type: 'POST',
+            data: {
+                'resume': {
+                    'Name': $('#Name').val(),
+                    'Surname': $('#Surname').val(),
+                    'Email': $('#Email').val(),
+                    'BirthDate': $('#BirthDate').val(),
+                    'CityName': $('#CityName').val(),
+                    'JobTitle': $('#JobTitle').val(),
+                    'CategoryId': $('#CategoryId').val(),
+                    'Wage': $('#Wage').val(),
+                    'PhoneNumber': $('#PhoneNumber').val(),
+                    'Telegram': $('#Telegram').val(),
+                    'FacebookLink': $('#FacebookLink').val(),
+                    'LinkedInLink': $('#LinkedInLink').val()
+                },
+                'works': works,
+                'educations': educations,
+                'courses': courses
+            },
+            success: function (response) {
+                $('#validations').empty();
+                console.log(response);
+                if (response.success) {
+                    console.log("OK");
+                    window.location.href = response.redirectToUrl;
+                }
+                else {
+                    console.log("error");
+                    for (var i = 0; i < response.data.length; i++) {
+                        var item = response.data[i];
+                        var k = item.key;
+                        var v = item.errors.join("\n");
+                        console.log(k + " " + v);
+                        $('#validations').append('<p>   •  ' + v + '</p>')
+                    }
+                    $('body,html').animate({ scrollTop: 0 }, 400);   
+                }
+            },
+        });
+    }
+
 
 </script>
 }

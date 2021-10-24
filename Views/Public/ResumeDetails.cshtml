@@ -20,11 +20,12 @@
                 <h5 style="text-align:center;" class="pt-2">Work experience</h5>
                 @foreach (var item in ViewBag.Work)
                 {
+                 <div class="border rounded p-2 pl-4 mt-2">
                     <p>Название компании: @item.CompanyName</p>
                     <p>Должность: @item.Position</p>
                     <p>Дата начала работы: @item.DateOfReceiving</p>
                     <p>Дата окончания работы: @item.DateOfEnd</p>
-                    <hr>
+                 </div>
                 }
             }
             @if (ViewBag.Education.Count != 0)
@@ -32,11 +33,12 @@
                 <h5 style="text-align:center;" class="pt-4">Education experience</h5>
                 @foreach (var item in ViewBag.Education)
                 {
+                 <div class="border rounded p-2 pl-4 mt-2">
                     <p>Название института: @item.InstitutionName</p>
                     <p>Специальность: @item.Speciality</p>
                     <p>Дата начала учебы: @item.DateOfReceiving</p>
                     <p>Дата окончания учебы: @item.DateOfEnd</p>
-                    <hr>
+                 </div>
                 }
             }
             @if (ViewBag.Courses.Count != 0)
@@ -44,14 +46,15 @@
                 <h5 style="text-align:center;" class="pt-4">Courses experience</h5>
                 @foreach (var item in ViewBag.Courses)
                 {
-                    <p>Название учебного учреждения: @item.InstitutionName</p>
+                <div class="border rounded p-2 pl-4 mt-2">
+                    <p>Название учебного учреждения: @item.CompanyName </p>
                     <p>Специальность: @item.Speciality</p>
                     <p>Дата начала курса: @item.DateOfReceiving</p>
                     <p>Дата окончания курса: @item.DateOfEnd</p>
-                    <hr>
+                </div>
                 }
             }
-            <p>Telegram: @Model.Telegram | Ссылка на Linkedin: @Model.LinkedInLink | Ссылка на Facebook: @Model.FacebookLink</p>
+            <p class="mt-3">Telegram: @Model.Telegram | Ссылка на Linkedin: @Model.LinkedInLink | Ссылка на Facebook: @Model.FacebookLink</p>
         </div>
     </div>
 </div>
