@@ -191,45 +191,75 @@ namespace HeadHunter.Controllers
             _context.Resumes.Update(resume);
 
             // Часть редактирования модулей
-            //foreach (var item in works)
-            //{
-            //    WorkExpirience work = new WorkExpirience
-            //    {
-            //        Id = Guid.NewGuid().ToString(),
-            //        ResumeId = resume.Id,
-            //        CompanyName = item.CompanyName,
-            //        Position = item.Position,
-            //        DateOfReceiving = item.DateOfReceiving,
-            //        DateOfEnd = item.DateOfEnd
-            //    };
-            //    _context.WorkExpiriences.Add(work);
-            //}
-            //foreach (var item in educations)
-            //{
-            //    EducationExpirience education = new EducationExpirience
-            //    {
-            //        Id = Guid.NewGuid().ToString(),
-            //        ResumeId = resume.Id,
-            //        InstitutionName = item.InstitutionName,
-            //        Speciality = item.Speciality,
-            //        DateOfReceiving = item.DateOfReceiving,
-            //        DateOfEnd = item.DateOfEnd
-            //    };
-            //    _context.EducationExpiriences.Add(education);
-            //}
-            //foreach (var item in courses)
-            //{
-            //    CoursesExpirience course = new CoursesExpirience
-            //    {
-            //        Id = Guid.NewGuid().ToString(),
-            //        ResumeId = resume.Id,
-            //        CompanyName = item.CompanyName,
-            //        Speciality = item.Speciality,
-            //        DateOfReceiving = item.DateOfReceiving,
-            //        DateOfEnd = item.DateOfEnd
-            //    };
-            //    _context.CoursesExpiriences.Add(course);
-            //}
+
+            List<WorkExpirience> oldWorks = _context.WorkExpiriences.Where(e => e.ResumeId == resume.Id).ToList();
+            List<EducationExpirience> oldEducations = _context.EducationExpiriences.Where(e => e.ResumeId == resume.Id).ToList();
+            List<CoursesExpirience> oldCources = _context.CoursesExpiriences.Where(e => e.ResumeId == resume.Id).ToList();
+
+            foreach (var item in works)
+            {
+                if (item.Id == null)
+                {
+                    WorkExpirience work = new WorkExpirience
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        ResumeId = resume.Id,
+                        CompanyName = item.CompanyName,
+                        Position = item.Position,
+                        DateOfReceiving = item.DateOfReceiving,
+                        DateOfEnd = item.DateOfEnd
+                    };
+                    _context.WorkExpiriences.Add(work);
+                }
+                else
+                {
+                    oldWorks.Remove(oldWorks.FirstOrDefault(w => w.Id == item.Id));
+                }
+            }
+            foreach (var item in educations)
+            {
+                if (item.Id == null)
+                {
+                    EducationExpirience education = new EducationExpirience
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        ResumeId = resume.Id,
+                        InstitutionName = item.InstitutionName,
+                        Speciality = item.Speciality,
+                        DateOfReceiving = item.DateOfReceiving,
+                        DateOfEnd = item.DateOfEnd
+                    };
+                    _context.EducationExpiriences.Add(education);
+                }
+                else
+                {
+                    oldEducations.Remove(oldEducations.FirstOrDefault(e => e.Id == item.Id));
+                }
+            }
+            foreach (var item in courses)
+            {
+                if (item.Id == null)
+                {
+                    CoursesExpirience course = new CoursesExpirience
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        ResumeId = resume.Id,
+                        CompanyName = item.CompanyName,
+                        Speciality = item.Speciality,
+                        DateOfReceiving = item.DateOfReceiving,
+                        DateOfEnd = item.DateOfEnd
+                    };
+                    _context.CoursesExpiriences.Add(course);
+                }
+                else {
+                    oldCources.Remove(oldCources.FirstOrDefault(c => c.Id == item.Id));
+                }
+            }
+            foreach (var item in oldWorks) _context.WorkExpiriences.Remove(item);
+            foreach (var item in oldEducations) _context.EducationExpiriences.Remove(item);
+            foreach (var item in oldCources) _context.CoursesExpiriences.Remove(item);
+
+
             _context.SaveChanges();
             return Json(new { success = true, redirectToUrl = Url.Action("Profile", "Applicant") });
         }

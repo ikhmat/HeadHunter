@@ -100,11 +100,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in ViewBag.Educations)
+                    @foreach (var item in ViewBag.Works)
                     {
                         <tr>
-                            <td>@item.InstitutionName</td>
-                            <td>@item.Speciality</td>
+                            <td style="display:none;">@item.Id</td>
+                            <td>@item.CompanyName</td>
+                            <td>@item.Position</td>
                             <td>@item.DateOfReceiving.ToString("yyyy-MM")</td>
                             <td>@item.DateOfEnd.ToString("yyyy-MM")<input type="button" class="btn btn-danger float-right" value="✖" onclick="Delete(this)" /></td>
                         </tr>
@@ -135,10 +136,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in ViewBag.Courses)
+                    @foreach (var item in ViewBag.Educations)
                     {
                         <tr>
-                            <td>@item.CompanyName</td>
+                            <td style="display:none;">@item.Id</td>
+                            <td>@item.InstitutionName</td>
                             <td>@item.Speciality</td>
                             <td>@item.DateOfReceiving.ToString("yyyy-MM")</td>
                             <td>@item.DateOfEnd.ToString("yyyy-MM")<input type="button" class="btn btn-danger float-right" value="✖" onclick="Delete(this)" /></td>
@@ -170,11 +172,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in ViewBag.Works)
+                    @foreach (var item in ViewBag.Courses)
                     {
                         <tr>
+                            <td style="display:none;">@item.Id</td>
                             <td>@item.CompanyName</td>
-                            <td>@item.Position</td>
+                            <td>@item.Speciality</td>
                             <td>@item.DateOfReceiving.ToString("yyyy-MM")</td>
                             <td>@item.DateOfEnd.ToString("yyyy-MM")<input type="button" class="btn btn-danger float-right" value="✖" onclick="Delete(this)" /></td>
                         </tr>
@@ -194,7 +197,7 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
-    <script>
+<script>
     function ShowNewWork() {
         if (!$('#newWork').is(':visible')) {
             $('#newWork').show();
@@ -211,7 +214,7 @@
         $('#work-date-end').val('');
     }
     function AddWork() {
-        $('#work-table tbody').append('<tr><td>' + $('#work-company').val() +
+        $('#work-table tbody').append('<tr><td style="display:none;"></td><td>' + $('#work-company').val() +
             '</td><td>' + $('#work-position').val() +
             '</td><td>' + $('#work-date-start').val() + '</td><td>' + $('#work-date-end').val() +
             '<input type="button" value="✖" class="btn btn-danger float-right" onclick="Delete(this)" /></td></tr>');
@@ -235,7 +238,7 @@
         $('#education-date-end').val('');
     }
     function AddEducation() {
-        $('#education-table tbody').append('<tr><td>' + $('#education-company').val() +
+        $('#education-table tbody').append('<tr><td style="display:none;"></td><td>' + $('#education-company').val() +
             '</td><td>' + $('#education-position').val() +
             '</td><td>' + $('#education-date-start').val() + '</td><td>' + $('#education-date-end').val() +
             '<input type="button" class="btn btn-danger float-right" value="✖" onclick="Delete(this)" /></td></tr>');
@@ -259,7 +262,7 @@
         $('#course-date-end').val('');
     }
     function AddCourse() {
-        $('#course-table tbody').append('<tr><td>' + $('#course-company').val() +
+        $('#course-table tbody').append('<tr><td style="display:none;"></td><td>' + $('#course-company').val() +
             '</td><td>' + $('#course-position').val() +
             '</td><td>' + $('#course-date-start').val() + '</td><td>' + $('#course-date-end').val() +
             '<input type="button" class="btn btn-danger float-right" value="✖" onclick="Delete(this)" /></td></tr>');
@@ -276,26 +279,29 @@
 
         $('#work-table tbody tr').each(function (index) {
             works.push({
-                CompanyName: $(this).find('td').eq(0).text(),
-                Position: $(this).find('td').eq(1).text(),
-                DateOfReceiving: $(this).find('td').eq(2).text(),
-                DateOfEnd: $(this).find('td').eq(3).text()
+                Id: $(this).find('td').eq(0).text(),
+                CompanyName: $(this).find('td').eq(1).text(),
+                Position: $(this).find('td').eq(2).text(),
+                DateOfReceiving: $(this).find('td').eq(3).text(),
+                DateOfEnd: $(this).find('td').eq(4).text()
             });
         });
         $('#education-table tbody tr').each(function (index) {
             educations.push({
-                InstitutionName: $(this).find('td').eq(0).text(),
-                Speciality: $(this).find('td').eq(1).text(),
-                DateOfReceiving: $(this).find('td').eq(2).text(),
-                DateOfEnd: $(this).find('td').eq(3).text()
+                Id: $(this).find('td').eq(0).text(),
+                InstitutionName: $(this).find('td').eq(1).text(),
+                Speciality: $(this).find('td').eq(2).text(),
+                DateOfReceiving: $(this).find('td').eq(3).text(),
+                DateOfEnd: $(this).find('td').eq(4).text()
             });
         });
         $('#course-table tbody tr').each(function (index) {
             courses.push({
-                CompanyName: $(this).find('td').eq(0).text(),
-                Speciality: $(this).find('td').eq(1).text(),
-                DateOfReceiving: $(this).find('td').eq(2).text(),
-                DateOfEnd: $(this).find('td').eq(3).text()
+                Id: $(this).find('td').eq(0).text(),
+                CompanyName: $(this).find('td').eq(1).text(),
+                Speciality: $(this).find('td').eq(2).text(),
+                DateOfReceiving: $(this).find('td').eq(3).text(),
+                DateOfEnd: $(this).find('td').eq(4).text()
             });
         });
 
@@ -346,5 +352,5 @@
     }
 
 
-    </script>
+</script>
 }
