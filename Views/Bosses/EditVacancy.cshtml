@@ -37,8 +37,8 @@
         </div>
         <div class="form-group">
             <label asp-for="ExperienceFrom" class="control-label">Опыт работы</label><br />
-            <span>от </span><input asp-for="ExperienceFrom" value="0" width="100" />
-            <span>до </span><input asp-for="ExperienceTo" value="0" width="100" /><br />
+            <span>от </span><input asp-for="ExperienceFrom" value="@Model.ExperienceFrom" width="100" />
+            <span>до </span><input asp-for="ExperienceTo" value="@Model.ExperienceTo" width="100" /><br />
             <span asp-validation-for="ExperienceFrom" class="text-danger"></span><br />
             <span asp-validation-for="ExperienceTo" class="text-danger"></span>
         </div>
