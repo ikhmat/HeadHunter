@@ -1,0 +1,22 @@
+﻿@model Vacancy
+@{
+    ViewBag.Tittle = "Vacancy Detail";
+    Layout = "_Layout";
+}
+<div class="card">
+    <div class="card-header">
+        Вакансия
+    </div>
+    <div class="card-body mx-5">
+        <div class="pt-2">
+            <p>Компания: @Model.User.CompanyName</p>
+            <p>Название: @Model.Name</p>
+            <p>Заработная плата в долларах США: @Model.Wage $</p>
+            <p>Требуемый опыт работы: от @Model.ExperienceFrom @if (Model.ExperienceTo != 0) { <span>@Model.ExperienceTo</span> }</p>
+            <p>Категория: @ViewBag.CategoryName</p>
+            <p>Email: @Model.User.Email</p>
+            <p>Номер телефона: @Model.User.PhoneNumber</p>
+            <p>Описание:    @Model.Description</p>
+        </div>
+    </div>
+</div>

@@ -32,7 +32,7 @@
             </thead>
             @foreach (var item in Model.Vacancies)
             {
-                <tr>
+                <tr onclick="details('@item.Id')" style="cursor: pointer;">
                     <td style="width: 50%;">@item.Name</td>
                     <td id="date-@item.Id" style="width: 25%;">@item.DateOfUpdate.ToUniversalTime()</td>
                     <td style="width: 25%;">
@@ -125,37 +125,40 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script>
-                        function Update(id) {
-                            $.ajax({
-                                url: '@Url.Action("UpdateVacancy", "Bosses")',
-                                type: 'POST',
-                                data: { 'id': id },
-                                success: function (data) {
+<script>
+        function details(vacancyId) {
+            window.location.href = '@Url.Action("VacancyDetails","Public")?vacancyId=' + vacancyId;
+        }
+        function Update(id) {
+            $.ajax({
+                url: '@Url.Action("UpdateVacancy", "Bosses")',
+                type: 'POST',
+                data: { 'id': id },
+                success: function (data) {
 
-                                    let dateTime = new Date(data['dateOfUpdate']).toLocaleString();
-                                    $('#date-' + id).text(dateTime);
-                                },
-                            });
-                        }
-                        function Disagreement(id) {
-                            $.ajax({
-                                url: '@Url.Action("Disagreement", "Bosses")',
-                                type: 'POST',
-                                data: { 'id': id },
-                                success: function (data) {
-                                    if (data['agreement'] == false) {
-                                        $('#buttonAgreement').text('Добавить в публикации');
-                                        $("#false").show();
-                                        setTimeout(function () { $("#false").hide(); }, 3000);
-                                    }
-                                    else {
-                                        $('#buttonAgreement').text('Снять с публикации');
-                                        $("#true").show();
-                                        setTimeout(function () { $("#true").hide(); }, 3000);
-                                    }
-                                },
-                            });
-                        }
-    </script>
+                    let dateTime = new Date(data['dateOfUpdate']).toLocaleString();
+                    $('#date-' + id).text(dateTime);
+                },
+            });
+        }
+        function Disagreement(id) {
+            $.ajax({
+                url: '@Url.Action("Disagreement", "Bosses")',
+                type: 'POST',
+                data: { 'id': id },
+                success: function (data) {
+                    if (data['agreement'] == false) {
+                        $('#buttonAgreement').text('Добавить в публикации');
+                        $("#false").show();
+                        setTimeout(function () { $("#false").hide(); }, 3000);
+                    }
+                    else {
+                        $('#buttonAgreement').text('Снять с публикации');
+                        $("#true").show();
+                        setTimeout(function () { $("#true").hide(); }, 3000);
+                    }
+                },
+            });
+        }
+</script>
 }
