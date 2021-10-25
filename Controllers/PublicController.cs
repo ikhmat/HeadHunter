@@ -41,8 +41,9 @@ namespace HeadHunter.Controllers
             ViewBag.CategoryName = _context.CategoryVacancies.Find(vacancy.CategoryVacancyId).Name;
             return View(vacancy);
         }
-        public IActionResult Publications(string categoryId)
+        public IActionResult Publications(string searchString, string categoryId)
         {
+            searchString = searchString.ToLower();
             PublicationsViewModel rlvm = new PublicationsViewModel()
             {
                 CategoryId = categoryId
@@ -50,6 +51,10 @@ namespace HeadHunter.Controllers
             if (User.IsInRole("applicant"))
             {
                 var vacancies = _context.Vacancies.Include(r => r.User).Where(r => r.Agreement == true);
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    vacancies = vacancies.Where(v => v.Name.ToLower().Contains(searchString));
+                }
                 if (!String.IsNullOrEmpty(categoryId))
                 {
                     vacancies = vacancies.Where(p => p.CategoryVacancyId.Contains(categoryId));
@@ -59,6 +64,10 @@ namespace HeadHunter.Controllers
             else
             {
                 var resumes = _context.Resumes.Include(r => r.User).Where(r => r.Published == true);
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    resumes = resumes.Where(v => v.JobTitle.ToLower().Contains(searchString));
+                }
                 if (!String.IsNullOrEmpty(categoryId))
                 {
                     resumes = resumes.Where(p => p.CategoryId.Contains(categoryId));
