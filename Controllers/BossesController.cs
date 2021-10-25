@@ -68,7 +68,7 @@ namespace HeadHunter.Controllers
                 user.CompanyName = model.CompanyName;
                 user.PhoneNumber = model.PhoneNumber;
                 await _db.SaveChangesAsync();
-            return RedirectToAction("Profile");
+            return RedirectToAction("BossesProfile");
             }
             return View(model);
         }
@@ -96,7 +96,7 @@ namespace HeadHunter.Controllers
                 vacancy.Agreement = true;
                 _db.Vacancies.Add(vacancy);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("Profile");
+                return RedirectToAction("BossesProfile");
             }
             List<CategoryVacancy> categories = _db.CategoryVacancies.ToList();
             categories.Remove(categories.FirstOrDefault(c => c.Id == "default"));
@@ -153,7 +153,7 @@ namespace HeadHunter.Controllers
                 vacancy.DateOfUpdate = DateTime.Now;
                 _db.Update(vacancy);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("Profile");
+                return RedirectToAction("BossesProfile");
             }
             ViewBag.Categories = _db.CategoryVacancies.ToList();
             return View(vacancy);

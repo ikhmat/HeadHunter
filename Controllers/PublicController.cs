@@ -96,6 +96,23 @@ namespace HeadHunter.Controllers
             ViewBag.CurrentUserId = _userManager.GetUserId(User);
             return View(viewModel);
         }
+        public IActionResult ApplicantProfile(string userId)
+        {
+            User user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            ApplicantProfileViewModel viewModel = new ApplicantProfileViewModel
+            {
+                UserId = user.Id,
+                Email = user.Email,
+                Nickname = user.UserName,
+                Name = user.Name,
+                Surname = user.Surname,
+                PhoneNumber = user.PhoneNumber,
+                LinkImg = user.LinkImg,
+                Resumes = _context.Resumes.Where(v => v.UserId == user.Id).Where(r => r.Published == true).OrderByDescending(v => v.UpdateDate).ToList()
+            };
+            ViewBag.CurrentUserId = _userManager.GetUserId(User);
+            return View(viewModel);
+        }
 
     }
 }

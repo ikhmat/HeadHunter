@@ -9,16 +9,22 @@
         <img src="~/avatars/@Model.LinkImg" width="200" height="200" class="border border-dark rounded-circle p-2" />
     </div>
     <div class="col-7 pt-3">
-        <p>Nickname: <b style="font-size:25px;">@Model.Nickname</b></p>
         <p>Surname: @Model.Surname</p>
         <p>Name: @Model.Name</p>
         <p>Email: @Model.Email</p>
         <p>Phone number: @Model.PhoneNumber</p>
-        <button type="button" class="btn btn-light border-dark" data-toggle="modal" data-target="#EditModal">Edit</button>
+        @if (Model.UserId == ViewBag.CurrentUserId)
+        {
+            <p>Nickname: <b style="font-size:25px;">@Model.Nickname</b></p>
+            <button type="button" class="btn btn-light border-dark" data-toggle="modal" data-target="#EditModal">Edit</button>
+        }
     </div>
 </div>
 <div class="mt-5">
-    <a asp-controller="Applicant" asp-action="AddResume" class="btn btn-light border-dark mb-3">Добавить резюме</a>
+    @if (Model.UserId == ViewBag.CurrentUserId)
+    {
+        <a asp-controller="Applicant" asp-action="AddResume" class="btn btn-light border-dark mb-3">Добавить резюме</a>
+    }
     @if (Model.Resumes.Count > 0)
     {
         <table class="table table-bordered">
@@ -26,7 +32,7 @@
                 <tr>
                     <th style="width: 50%;">Job title</th>
                     <th style="width: 25%;">Update Date</th>
-                    <th style="width: 25%;"></th>
+                    <th style="width: 25%;"></th>        
                 </tr>
             </thead>
             @foreach (var item in Model.Resumes)
@@ -35,24 +41,33 @@
                     <td style="width: 50%;">@item.JobTitle</td>
                     <td id="date-@item.Id" style="width: 25%;">@item.UpdateDate.ToUniversalTime()</td>
                     <td style="width: 25%;">
-                        <a class="btn btn-light border-dark" onclick="Update('@item.Id')">Обновить</a>
-                        <a asp-controller="Applicant" asp-action="EditResume" class="btn btn-light border-dark" asp-route-resumeId="@item.Id">Редактировать</a><br />
-                        @if (item.Published)
+                        @if (Model.UserId == ViewBag.CurrentUserId)
                         {
-                            <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Снять с публикации</a>
+
+                            <a class="btn btn-light border-dark" onclick="Update('@item.Id')">Обновить</a>
+                            <a asp-controller="Applicant" asp-action="EditResume" class="btn btn-light border-dark" asp-route-resumeId="@item.Id">Редактировать</a><br />
+                            @if (item.Published)
+                            {
+                                <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Снять с публикации</a>
+                            }
+                            else
+                            {
+                                <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Добавить в публикации</a>
+                            }
+                        
                         }
                         else
                         {
-                            <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Добавить в публикации</a>
+                            <button type="button" class="btn btn-primary">Respond</button>
                         }
-                    </td>
+                    </td >
                 </tr>
             }
         </table>
     }
     else
     {
-        <p class="text-center font-weight-bold">У вас еще нет резюме</p>
+        <p class="text-center font-weight-bold">У пользователя еще нет резюме</p>
     }
 </div>
 
@@ -74,7 +89,7 @@
                 </button>
             </div>
             <div class="m-3">
-                <form asp-controller="Bosses" asp-action="Edit" enctype="multipart/form-data">
+                <form asp-controller="Applicant" asp-action="Edit" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="UserId" value="@Model.UserId" />
                     <label asp-for="File" class="control-label">Изменение аватарки</label>

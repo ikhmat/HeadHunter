@@ -29,7 +29,7 @@ namespace HeadHunter.Controllers
         {
             return View();
         }
-        public IActionResult Profile()
+        public IActionResult ApplicantProfile()
         {
             User user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
             ApplicantProfileViewModel viewModel = new ApplicantProfileViewModel
@@ -43,6 +43,7 @@ namespace HeadHunter.Controllers
                 LinkImg = user.LinkImg,
                 Resumes = _context.Resumes.Where(v => v.UserId == user.Id).OrderByDescending(v => v.UpdateDate).ToList()
             };
+            ViewBag.CurrentUserId = _userManager.GetUserId(User);
             return View(viewModel);
         }
         [HttpPost]
@@ -68,7 +69,7 @@ namespace HeadHunter.Controllers
                 user.Name = model.Name;
                 user.PhoneNumber = model.PhoneNumber;
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Profile");
+                return RedirectToAction("ApplicantProfile");
             }
             return View(model);
         }
@@ -141,7 +142,7 @@ namespace HeadHunter.Controllers
                 _context.CoursesExpiriences.Add(course);
             }
             _context.SaveChanges();
-            return Json(new { success = true, redirectToUrl = Url.Action("Profile", "Applicant") });
+            return Json(new { success = true, redirectToUrl = Url.Action("ApplicantProfile", "Applicant") });
         }
         public async Task<IActionResult> UpdateResume(string id)
         {
@@ -261,7 +262,7 @@ namespace HeadHunter.Controllers
 
 
             _context.SaveChanges();
-            return Json(new { success = true, redirectToUrl = Url.Action("Profile", "Applicant") });
+            return Json(new { success = true, redirectToUrl = Url.Action("ApplicantProfile", "Applicant") });
         }
     }
 }
