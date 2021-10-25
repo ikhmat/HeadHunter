@@ -4,19 +4,35 @@
     Layout = "_Layout";
 }
 <div class="card">
-    @if (Model.Receiver.CompanyName != String.Empty)
-    {
-        <div class="card-header">
-            <a>@Model.Receiver.CompanyName</a>
+    <div class="card-header">
+        @if (Model.FirstUser.CompanyName != String.Empty)
+        {
+            <img src="~/avatars/@Model.FirstUser.LinkImg" width="50" height="50" class="rounded-circle p-2" />
+            <a>@Model.FirstUser.CompanyName</a>
+        }
+        else
+        {
+            <img src="~/avatars/@Model.FirstUser.LinkImg" width="50" height="50" class="rounded-circle p-2" />
+            <a>@Model.FirstUser.Name @Model.FirstUser.Surname</a>
+        }
+        <div class="btn-group">
+            <button type="button" class="btn btn-secondary">Action</button>
+            <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" asp-controller="Public" asp-action="ResumeDetails" asp-route-resumeId="@Model.ResumeId">Resume</a>
+                <a class="dropdown-item" asp-controller="Public" asp-action="VacancyDetails" asp-route-vacancyId="@Model.VacancyId">Vacancy</a>
+            </div>
         </div>
-    }
-    else
-    {
-        <div class="card-header">
-            <a>@Model.Receiver.Name @Model.Receiver.Surname</a>
-        </div>
-    }
-    <div class="card-body">
-
     </div>
-</div>
+    <div class="card-body">
+        @foreach (Message item in ViewBag.Messages)
+        {
+            if (true)
+            {
+
+            }
+        }
+    </div>
+    </div>

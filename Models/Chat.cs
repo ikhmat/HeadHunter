@@ -8,10 +8,10 @@ namespace HeadHunter.Models
     public class Chat
     {
         public string Id { get; set; }
-        public string ReceiverId { get; set; }
-        public User Receiver { get; set; }
-        public string SenderId { get; set; }
-        public User Sender { get; set; }
+        public string FirstUserId { get; set; }
+        public User FirstUser { get; set; }
+        public string SecondUserId { get; set; }
+        public User SecondUser { get; set; }
         public string ResumeId { get; set; }
         public Resume Resume { get; set; }
         public string VacancyId { get; set; }
