@@ -26,7 +26,7 @@ namespace HeadHunter.Controllers
             _db = db;
         }
         [HttpGet]
-        public IActionResult Profile()
+        public IActionResult BossesProfile()
         {
             User user = _db.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
             BossesProfileViewModel viewModel = new BossesProfileViewModel
@@ -41,9 +41,9 @@ namespace HeadHunter.Controllers
                 LinkImg = user.LinkImg,
                 Vacancies = _db.Vacancies.Where(v => v.UserId == user.Id).OrderByDescending(v => v.DateOfUpdate).ToList()
             };
+            ViewBag.CurrentUserId = _userManager.GetUserId(User);
             return View(viewModel);
         }
-
         [HttpPost]
         public async Task<IActionResult> Edit(BossesProfileViewModel model)
         {
