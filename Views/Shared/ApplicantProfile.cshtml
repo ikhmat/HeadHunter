@@ -154,12 +154,12 @@
                                 success: function (data) {
                                     console.log(data);
                                     if (data['published'] == false) {
-                                        $('#buttonAgreement').text('Добавить в публикации');
+                                        $('#buttonAgreement-' + id).text('Добавить в публикации');
                                         $("#false").show();
                                         setTimeout(function () { $("#false").hide(); }, 3000);
                                     }
                                     else {
-                                        $('#buttonAgreement').text('Снять с публикации');
+                                        $('#buttonAgreement-' + id).text('Снять с публикации');
                                         $("#true").show();
                                         setTimeout(function () { $("#true").hide(); }, 3000);
                                     }

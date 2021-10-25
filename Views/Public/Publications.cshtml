@@ -3,6 +3,18 @@
     ViewBag.Tittle = "Resumes";
     Layout = "_Layout";
 }
+
+<div class="btn-group mb-2">
+    <button class="btn btn-light btn-sm" type="button">Сортировать по</button>
+    <button type="button" class="btn btn-sm btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <div class="dropdown-menu">
+        <a class="dropdown-item" asp-action="Publications" asp-route-sortOrder="@ViewBag.DateSort">по дате</a>
+        <a class="dropdown-item" asp-action="Publications" asp-route-sortOrder="@ViewBag.WageSort">по зарплатеы</a>
+    </div>
+</div>
+
 <form asp-action="Publications" asp-controller="Public" method="get">
     <div class="form_row">
         <label for="">
@@ -74,6 +86,9 @@ else
 @section Scripts
 {
     <script>
+
+
+
         function detailsResume(resumeId) {
             window.location.href = '@Url.Action("ResumeDetails","Public")?resumeId=' + resumeId;
         }
