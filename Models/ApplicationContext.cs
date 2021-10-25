@@ -15,7 +15,8 @@ namespace HeadHunter.Models
         public DbSet<CoursesExpirience> CoursesExpiriences { get; set; }
         public DbSet<Vacancy> Vacancies { get; set; }
         public DbSet<CategoryVacancy> CategoryVacancies { get; set; }
-
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Chat> Chats { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
     }
