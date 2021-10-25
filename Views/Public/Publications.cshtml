@@ -43,8 +43,8 @@
                         <div>
                             <p class="float-right" style="font-size: 20px;">from @item.Wage $</p>
                             <h5 class="card-title">@item.Name</h5>
-                            <p>@item.User.CompanyName</p>
-                            <button type="button" class="btn btn-primary">Send Message</button>
+                            <a class="text-dark" asp-controller="Public" asp-action="BossesProfile" asp-route-userId="@item.UserId">@item.User.CompanyName</a><br />
+                            <button type="button" class="btn btn-primary my-2">Send Message</button>
                         </div>
                         <p class="card-text"><small class="text-muted">Last updated @item.DateOfUpdate</small></p>
                     </div>
@@ -69,8 +69,8 @@ else
                         <div>
                             <p class="float-right" style="font-size: 20px;">from @item.Wage $</p>
                             <h5 class="card-title">@item.JobTitle</h5>
-                            <p>@item.User.Name @item.User.Surname</p>
-                            <button type="button" class="btn btn-primary">Send Message</button>
+                            <a class="text-dark" asp-controller="Public" asp-action="ApplicantProfile" asp-route-userId="@item.UserId">@item.User.Name @item.User.Surname</a><br />
+                            <button type="button" class="btn btn-primary my-2">Send Message</button>
                         </div>
                         <p class="card-text"><small class="text-muted">Last updated @item.UpdateDate</small></p>
                     </div>

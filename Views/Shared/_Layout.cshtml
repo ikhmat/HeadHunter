@@ -17,33 +17,52 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Public" asp-action="Publications">Resumes</a>
-                        </li>
-                    </ul>
-                    <div class="login_group">
                         @if (User.Identity.IsAuthenticated)
                         {
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Public" asp-action="Publications">
+                                        @if (User.IsInRole("applicant"))
+                                        {
+                                            <span>Vacancies</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Resumes</span>
+                                        }
+                                    </a>
+                                </li>
+                                <li class="nav-item" style="margin-left: auto; margin-right: auto;">
+                                    <form id="search">
+                                        <div class="form-outline">
+                                            <input style="text-align: center;" type="text" id="SearchString" class="form-control" placeholder="Search"
+                                                   aria-label="Search" />
+                                        </div>
+                                    </form>
+                                </li>
+                            </ul>
+                            <div class="login_group ml-auto">
                             @if (User.IsInRole("applicant"))
                             {
-                                <a class="text-dark" asp-area="" asp-controller="Applicant" asp-action="Profile">@User.Identity.Name</a>
+                                <a class="text-dark" asp-area="" asp-controller="Applicant" asp-action="ApplicantProfile">@User.Identity.Name</a>
                             }
                             else
                             {
-                                <a class="text-dark" asp-area="" asp-controller="Bosses" asp-action="Profile">@User.Identity.Name</a>
+                                <a class="text-dark" asp-area="" asp-controller="Bosses" asp-action="BossesProfile">@User.Identity.Name</a>
                             }
 
                             <form method="post" asp-controller="Account" asp-action="Logout">
                                 <input type="submit" value="Выход" />
                             </form>
+                            </div>
                         }
                         else
                         {
+                            <div class="login_group ml-auto">
                             <a asp-controller="Account" asp-action="Login">Вход</a>
                             <a asp-controller="Account" asp-action="Register">Регистрация</a>
-                        }
-                    </div>
+                        </div>
+                        }          
                 </div>
             </div>
         </nav>
@@ -62,6 +81,14 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+   $('#search').on('submit', function (event) {
+               event.preventDefault();
+               var searchKey = $('#SearchString').val();
+               searchKey = encodeURIComponent(searchKey);
+               window.location.href = '@Url.Action("Publications","Public")?searchString=' + searchKey;
+   });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -9,17 +9,23 @@
         <img src="~/avatars/@Model.LinkImg" width="200" height="200" class="border border-dark rounded-circle p-2" />
     </div>
     <div class="col-7 pt-3">
-        <p>Nickname: <b style="font-size:25px;">@Model.Nickname</b></p>
+        <b style="font-size:25px;" class="py-4">@Model.CompanyName</b>
         <p>Email: @Model.Email</p>
         <p>Phone: @Model.PhoneNumber</p>
-        <p>Surname: @Model.Surname</p>
-        <p>Name: @Model.Name</p>
-        <p>Компания: @Model.CompanyName</p>
-        <button type="button" class="btn btn-light border-dark" data-toggle="modal" data-target="#EditModal">Edit</button>
+        @if (Model.UserId == ViewBag.CurrentUserId)
+        {
+            <p>Surname: @Model.Surname</p>
+            <p>Name: @Model.Name</p>
+            <p>Nickname: <b style="font-size:25px;">@Model.Nickname</b></p>
+            <button type="button" class="btn btn-light border-dark" data-toggle="modal" data-target="#EditModal">Edit</button>
+        }
     </div>
 </div>
 <div class="mt-5">
-    <a asp-controller="Bosses" asp-action="AddVacancy" class="btn btn-light border-dark mb-3">Добавить вакансию</a>
+    @if (Model.UserId == ViewBag.CurrentUserId)
+    {
+        <a asp-controller="Bosses" asp-action="AddVacancy" class="btn btn-light border-dark mb-3">Добавить вакансию</a>
+    }
     @if (Model.Vacancies.Count > 0)
     {
         <table class="table table-bordered">
@@ -36,15 +42,23 @@
                     <td style="width: 50%;">@item.Name</td>
                     <td id="date-@item.Id" style="width: 25%;">@item.DateOfUpdate.ToUniversalTime()</td>
                     <td style="width: 25%;">
-                        <a class="btn btn-light border-dark" onclick="Update('@item.Id')">Обновить</a>
-                        <a asp-controller="Bosses" asp-action="EditVacancy" class="btn btn-light border-dark" asp-route-id="@item.Id">Редактировать</a><br />
-                        @if (item.Agreement)
+                        @if (Model.UserId == ViewBag.CurrentUserId)
                         {
-                            <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Снять с публикации</a>
+
+                            <a class="btn btn-light border-dark" onclick="Update('@item.Id')">Обновить</a>
+                            <a asp-controller="Bosses" asp-action="EditVacancy" class="btn btn-light border-dark" asp-route-id="@item.Id">Редактировать</a><br />
+                            @if (item.Agreement)
+                            {
+                                <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Снять с публикации</a>
+                            }
+                            else
+                            {
+                                <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Добавить в публикации</a>
+                            }
                         }
                         else
                         {
-                            <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Добавить в публикации</a>
+                            <button type="button" class="btn btn-primary">Respond</button>
                         }
                     </td>
                 </tr>
@@ -53,7 +67,7 @@
     }
     else
     {
-        <p class="text-center font-weight-bold">У вас еще нет вакансий</p>
+        <p class="text-center font-weight-bold">У пользователя еще нет вакансий</p>
     }
 </div>
 

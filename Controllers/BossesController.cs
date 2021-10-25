@@ -26,7 +26,7 @@ namespace HeadHunter.Controllers
             _db = db;
         }
         [HttpGet]
-        public IActionResult Profile()
+        public IActionResult BossesProfile()
         {
             User user = _db.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
             BossesProfileViewModel viewModel = new BossesProfileViewModel
@@ -41,9 +41,9 @@ namespace HeadHunter.Controllers
                 LinkImg = user.LinkImg,
                 Vacancies = _db.Vacancies.Where(v => v.UserId == user.Id).OrderByDescending(v => v.DateOfUpdate).ToList()
             };
+            ViewBag.CurrentUserId = _userManager.GetUserId(User);
             return View(viewModel);
         }
-
         [HttpPost]
         public async Task<IActionResult> Edit(BossesProfileViewModel model)
         {
@@ -68,7 +68,7 @@ namespace HeadHunter.Controllers
                 user.CompanyName = model.CompanyName;
                 user.PhoneNumber = model.PhoneNumber;
                 await _db.SaveChangesAsync();
-            return RedirectToAction("Profile");
+            return RedirectToAction("BossesProfile");
             }
             return View(model);
         }
@@ -96,7 +96,7 @@ namespace HeadHunter.Controllers
                 vacancy.Agreement = true;
                 _db.Vacancies.Add(vacancy);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("Profile");
+                return RedirectToAction("BossesProfile");
             }
             List<CategoryVacancy> categories = _db.CategoryVacancies.ToList();
             categories.Remove(categories.FirstOrDefault(c => c.Id == "default"));
@@ -153,7 +153,7 @@ namespace HeadHunter.Controllers
                 vacancy.DateOfUpdate = DateTime.Now;
                 _db.Update(vacancy);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("Profile");
+                return RedirectToAction("BossesProfile");
             }
             ViewBag.Categories = _db.CategoryVacancies.ToList();
             return View(vacancy);
