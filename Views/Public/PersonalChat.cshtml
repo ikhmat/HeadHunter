@@ -1,0 +1,22 @@
+﻿@model Chat
+@{
+    ViewBag.Tittle = "Personal Chat";
+    Layout = "_Layout";
+}
+<div class="card">
+    @if (Model.Receiver.CompanyName != String.Empty)
+    {
+        <div class="card-header">
+            <a>@Model.Receiver.CompanyName</a>
+        </div>
+    }
+    else
+    {
+        <div class="card-header">
+            <a>@Model.Receiver.Name @Model.Receiver.Surname</a>
+        </div>
+    }
+    <div class="card-body">
+
+    </div>
+</div>
