@@ -8,6 +8,7 @@
         <div id="validations" class="text-danger"></div>
         <input type="hidden" asp-for="Id" value="@Model.Id" />
         <input type="hidden" asp-for="UserId" value="@Model.UserId" />
+        <input type="hidden" asp-for="Published" value="@Model.Published" />
         <div class="form-group">
             <label asp-for="Name" class="control-label"></label>
             <input asp-for="Name" class="form-control" />
@@ -23,7 +24,7 @@
             <input asp-for="Email" class="form-control" />
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
-        <div class="form-group" onclick="">
+        <div class="form-group">
             <label asp-for="BirthDate" class="control-label"></label>
             <input asp-for="BirthDate" class="form-control" type="date" />
             <span asp-validation-for="BirthDate" class="text-danger"></span>
@@ -312,6 +313,7 @@
                 'resume': {
                     'Id': $('#Id').val(),
                     'UserId': $('#UserId').val(),
+                    'Published': $('#Published').val(),
                     'Name': $('#Name').val(),
                     'Surname': $('#Surname').val(),
                     'Email': $('#Email').val(),

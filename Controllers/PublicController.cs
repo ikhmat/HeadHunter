@@ -1,4 +1,5 @@
-﻿using HeadHunter.Models;
+﻿using HeadHunter.Enums;
+using HeadHunter.Models;
 using HeadHunter.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -41,12 +42,16 @@ namespace HeadHunter.Controllers
             ViewBag.CategoryName = _context.CategoryVacancies.Find(vacancy.CategoryVacancyId).Name;
             return View(vacancy);
         }
-        public IActionResult Publications(string categoryId)
+        public IActionResult Publications(string categoryId, SortState sortOrder = SortState.DateDesc)
         {
             PublicationsViewModel rlvm = new PublicationsViewModel()
             {
                 CategoryId = categoryId
             };
+            ViewBag.DateSort = sortOrder == SortState.DateAsc ? SortState.DateDesc : SortState.DateAsc;
+            ViewBag.WageSort = sortOrder == SortState.WageAsc ? SortState.WageDesc : SortState.WageAsc;
+
+
             if (User.IsInRole("applicant"))
             {
                 var vacancies = _context.Vacancies.Include(r => r.User).Where(r => r.Agreement == true);
@@ -54,7 +59,23 @@ namespace HeadHunter.Controllers
                 {
                     vacancies = vacancies.Where(p => p.CategoryVacancyId.Contains(categoryId));
                 }
+                switch (sortOrder)
+                {
+                    case SortState.DateAsc:
+                        vacancies = vacancies.OrderBy(s => s.DateOfUpdate);
+                        break;
+                    case SortState.WageAsc:
+                        vacancies = vacancies.OrderBy(s => s.Wage);
+                        break;
+                    case SortState.WageDesc:
+                        vacancies = vacancies.OrderByDescending(s => s.Wage);
+                        break;
+                    default:
+                        vacancies = vacancies.OrderByDescending(s => s.DateOfUpdate);
+                        break;
+                }
                 rlvm.Vacancies = vacancies;
+
             }
             else
             {
@@ -63,8 +84,27 @@ namespace HeadHunter.Controllers
                 {
                     resumes = resumes.Where(p => p.CategoryId.Contains(categoryId));
                 }
+                switch (sortOrder)
+                {
+                    case SortState.DateAsc:
+                        resumes = resumes.OrderBy(s => s.UpdateDate);
+                        break;
+                    case SortState.WageAsc:
+                        resumes = resumes.OrderBy(s => s.Wage);
+                        break;
+                    case SortState.WageDesc:
+                        resumes = resumes.OrderByDescending(s => s.Wage);
+                        break;
+                    default:
+                        resumes = resumes.OrderByDescending(s => s.UpdateDate);
+                        break;
+                }
+
                 rlvm.Resumes = resumes;
+
             }
+
+
             ViewBag.Categories = _context.CategoryVacancies.ToList();
             return View(rlvm);
         }

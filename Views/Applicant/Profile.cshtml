@@ -39,11 +39,11 @@
                         <a asp-controller="Applicant" asp-action="EditResume" class="btn btn-light border-dark" asp-route-resumeId="@item.Id">Редактировать</a><br />
                         @if (item.Published)
                         {
-                            <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Снять с публикации</a>
+                            <a id="buttonAgreement-@item.Id" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Снять с публикации</a>
                         }
                         else
                         {
-                            <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Добавить в публикации</a>
+                            <a id="buttonAgreement-@item.Id" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Добавить в публикации</a>
                         }
                     </td>
                 </tr>
@@ -139,12 +139,12 @@
                                 success: function (data) {
                                     console.log(data);
                                     if (data['published'] == false) {
-                                        $('#buttonAgreement').text('Добавить в публикации');
+                                        $('#buttonAgreement-' + id).text('Добавить в публикации');
                                         $("#false").show();
                                         setTimeout(function () { $("#false").hide(); }, 3000);
                                     }
                                     else {
-                                        $('#buttonAgreement').text('Снять с публикации');
+                                        $('#buttonAgreement-' + id).text('Снять с публикации');
                                         $("#true").show();
                                         setTimeout(function () { $("#true").hide(); }, 3000);
                                     }
