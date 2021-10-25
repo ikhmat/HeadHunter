@@ -42,7 +42,7 @@ namespace HeadHunter.Controllers
             ViewBag.CategoryName = _context.CategoryVacancies.Find(vacancy.CategoryVacancyId).Name;
             return View(vacancy);
         }
-        public IActionResult Publications(string categoryId, SortState sortOrder = SortState.DateDesc)
+        public IActionResult Publications(string searchString, string categoryId, SortState sortOrder = SortState.DateDesc)
         {
             PublicationsViewModel rlvm = new PublicationsViewModel()
             {
