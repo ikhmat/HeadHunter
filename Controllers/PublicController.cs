@@ -45,6 +45,7 @@ namespace HeadHunter.Controllers
         public IActionResult Publications(string searchString, string categoryId, SortState sortOrder = SortState.DateDesc, int page = 1)
         {
             int pageSize = 20;
+            string userId = _userManager.GetUserId(User);
             PublicationsViewModel rlvm = new PublicationsViewModel()
             {
                 CategoryId = categoryId
@@ -83,7 +84,7 @@ namespace HeadHunter.Controllers
                 rlvm.PageViewModel = new PageViewModel(vacancies.Count(), page, pageSize);
                 rlvm.Vacancies = vacancies.Skip((page - 1) * pageSize).Take(pageSize);
                 ViewBag.PageCount = (vacancies.Count() + pageSize - 1) / pageSize;
-
+                ViewBag.MyResumes = _context.Resumes.Where(r => r.UserId == userId).ToList();
             }
             else
             {
@@ -116,6 +117,7 @@ namespace HeadHunter.Controllers
                 rlvm.PageViewModel = new PageViewModel(resumes.Count(), page, pageSize);
                 rlvm.Resumes = resumes.Skip((page - 1) * pageSize).Take(pageSize);
                 ViewBag.PageCount = (resumes.Count() + pageSize - 1) / pageSize;
+                ViewBag.MyVacancies = _context.Vacancies.Where(r => r.UserId == userId).ToList();
             }
 
             ViewBag.Categories = _context.CategoryVacancies.ToList();
@@ -157,5 +159,66 @@ namespace HeadHunter.Controllers
             return View(viewModel);
         }
 
+        public IActionResult PersonalChat(string chatId)
+        {
+            User user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
+            Chat chat = _context.Chats.Include(u => u.FirstUser).Include(u => u.SecondUser).FirstOrDefault(c => c.Id == chatId);
+
+            if (chat == null)
+            {
+                return RedirectToAction("Publications");
+            }
+            ViewBag.CurrentUser = user.Id;
+            ViewBag.Messages = _context.Messages.Where(m => m.ChatId == chat.Id);
+            return View(chat);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateChat(string vacancyId, string resumeId)
+        {
+            Chat existChat = await _context.Chats.FirstOrDefaultAsync(c => c.VacancyId == vacancyId && c.ResumeId == resumeId);
+            if (existChat != null)
+            {
+                return Json(new { chatId = existChat.Id });
+            }
+            Vacancy vacancy = _context.Vacancies.FirstOrDefault(v => v.Id == vacancyId);
+            Resume resume = _context.Resumes.FirstOrDefault(v => v.Id == resumeId);
+            User firstUser = _context.Users.FirstOrDefault(u => u.Id == vacancy.UserId);
+            User secondUser = _context.Users.FirstOrDefault(u => u.Id == resume.UserId);
+            Chat chat = new Chat
+            {
+                Id = Guid.NewGuid().ToString(),
+                FirstUserId = firstUser.Id,
+                SecondUserId = secondUser.Id,
+                VacancyId = vacancy.Id,
+                ResumeId = resume.Id
+            };
+            _context.Chats.Add(chat);
+            await _context.SaveChangesAsync();
+            return Json(new { chatId = chat.Id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendMessage(string senderId, string chatId, string text)
+        {
+            Message message = new Message {
+                Id = Guid.NewGuid().ToString(),
+                ChatId = chatId,
+                SenderId = senderId,
+                Text = text.Trim(),
+                DateOfSending = DateTime.Now
+            };
+
+            _context.Messages.Add(message);
+            await _context.SaveChangesAsync();
+            return Json(message);
+        }
+
+        [HttpPost]
+        public IActionResult CheckNewMessages(string chatId, int count)
+        {
+            Message[] messages = _context.Messages.Where(m => m.ChatId == chatId).OrderBy(m => m.DateOfSending).ToArray();
+            return Json(messages.Skip(count));
+        }
     }
 }
