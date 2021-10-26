@@ -47,12 +47,12 @@
                             <a class="btn btn-light border-dark" onclick="Update('@item.Id')">Обновить</a>
                             <a asp-controller="Applicant" asp-action="EditResume" class="btn btn-light border-dark" asp-route-resumeId="@item.Id">Редактировать</a><br />
                             @if (item.Published)
-                            {
-                                <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Снять с публикации</a>
+                            {   
+                                <a id="buttonAgreement-@item.Id" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Снять с публикации</a>
                             }
                             else
                             {
-                                <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Добавить в публикации</a>
+                                <a id="buttonAgreement-@item.Id" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Добавить в публикации</a>
                             }
                         
                         }
@@ -130,6 +130,7 @@
                     }
                     <script>
                         function details(resumeId) {
+                            event.stopPropagation();
                             window.location.href = '@Url.Action("ResumeDetails","Public")?resumeId=' + resumeId;
                         }
                         function Update(id) {

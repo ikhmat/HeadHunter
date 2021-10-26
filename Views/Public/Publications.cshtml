@@ -15,6 +15,8 @@
     </div>
 </div>
 
+<p id="hidden-id" style="display: none;"></p>
+
 <form asp-action="Publications" asp-controller="Public" method="get">
     <div class="form_row">
         <label for="">
@@ -44,7 +46,7 @@
                     <p class="float-right" style="font-size: 20px;">from @item.Wage $</p>
                     <h5 class="card-title">@item.Name</h5>
                     <a class="text-dark" asp-controller="Public" asp-action="BossesProfile" asp-route-userId="@item.UserId">@item.User.CompanyName</a><br />
-                    <button type="button" class="btn btn-primary my-2">Send Message</button>
+                    <button type="button" class="btn btn-primary my-2" data-toggle="modal" data-target="#ChoiseModal" onclick="SaveId('@item.Id')">Send Message</button>
                 </div>
                 <p class="card-text"><small class="text-muted">Last updated @item.DateOfUpdate</small></p>
             </div>
@@ -108,7 +110,7 @@ else
                     <p class="float-right" style="font-size: 20px;">from @item.Wage $</p>
                     <h5 class="card-title">@item.JobTitle</h5>
                     <a class="text-dark" asp-controller="Public" asp-action="ApplicantProfile" asp-route-userId="@item.UserId">@item.User.Name @item.User.Surname</a><br />
-                    <button type="button" class="btn btn-primary my-2">Send Message</button>
+                    <button type="button" class="btn btn-primary my-2" data-toggle="modal" data-target="#ChoiseModal" onclick="SaveId('@item.Id')">Send Message</button>
                 </div>
                 <p class="card-text"><small class="text-muted">Last updated @item.UpdateDate</small></p>
             </div>
@@ -155,11 +157,88 @@ else
         <p class="text-center font-weight-bold">Опубликованных резюме еще нет</p>
     }
 }
+
+
+<div class="modal fade" id="ChoiseModal" tabindex="-1" role="dialog" aria-labelledby="ChoiseModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (Model.Resumes != null)
+                {
+                    <h5 class="modal-title" id="ChoiseModalLabel">Выберите резюме</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title" id="ChoiseModalLabel">Выберите вакансию</h5>
+                }
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="m-3">
+                @if (Model.Resumes != null)
+                {
+                    foreach (var item in ViewBag.MyVacancies)
+                    {
+                        <div class="p-3">
+                            <div class="w-75">@item.Name</div>
+                            <a class="btn btn-primary ml-auto" onclick="CreateChatBoss('@item.Id')">Выбрать</a>
+                        </div>
+                    }
+                }
+                else
+                {
+                    foreach (var item in ViewBag.MyResumes)
+                    {
+                        <div class="p-3">
+                            <div class="w-75">@item.JobTitle</div>
+                            <a class="btn btn-primary ml-auto" onclick="CreateChatApplicant('@item.Id')">Выбрать</a>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts
 {
     <script>
 
 
+        function SaveId(id) {
+            event.stopPropagation();
+            $('#hidden-id').val(id);
+            console.log($('#hidden-id').val());
+            $('#ChoiseModal').modal('show');
+        }
+
+        function CreateChatBoss(id) {
+            console.log(id);
+            console.log($('#hidden-id').val())
+            $.ajax({
+                url: '@Url.Action("CreateChat", "Public")',
+                type: 'POST',
+                data: { 'vacancyId': id, 'resumeId': $('#hidden-id').val() },
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+        function CreateChatApplicant(id) {
+            console.log(id);
+            console.log($('#hidden-id').val())
+            $.ajax({
+                url: '@Url.Action("CreateChat", "Public")',
+                type: 'POST',
+                data: { 'vacnacyId': $('#hidden-id').val(), 'resumeid': id },
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
 
         function detailsResume(resumeId) {
             window.location.href = '@Url.Action("ResumeDetails","Public")?resumeId=' + resumeId;

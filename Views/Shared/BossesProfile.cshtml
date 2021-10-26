@@ -49,11 +49,11 @@
                             <a asp-controller="Bosses" asp-action="EditVacancy" class="btn btn-light border-dark" asp-route-id="@item.Id">Редактировать</a><br />
                             @if (item.Agreement)
                             {
-                                <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Снять с публикации</a>
+                                <a id="buttonAgreement-@item.Id" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Снять с публикации</a>
                             }
                             else
                             {
-                                <a id="buttonAgreement" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Добавить в публикации</a>
+                                <a id="buttonAgreement-@item.Id" class="btn btn-light border-dark mt-1" onclick="Disagreement('@item.Id')">Добавить в публикации</a>
                             }
                         }
                         else
@@ -140,10 +140,12 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 <script>
-        function details(vacancyId) {
+    function details(vacancyId) {
+        event.stopPropagation();
             window.location.href = '@Url.Action("VacancyDetails","Public")?vacancyId=' + vacancyId;
         }
-        function Update(id) {
+    function Update(id) {
+        event.stopPropagation();
             $.ajax({
                 url: '@Url.Action("UpdateVacancy", "Bosses")',
                 type: 'POST',
@@ -155,19 +157,20 @@
                 },
             });
         }
-        function Disagreement(id) {
+    function Disagreement(id) {
+        event.stopPropagation();
             $.ajax({
                 url: '@Url.Action("Disagreement", "Bosses")',
                 type: 'POST',
                 data: { 'id': id },
                 success: function (data) {
                     if (data['agreement'] == false) {
-                        $('#buttonAgreement').text('Добавить в публикации');
+                        $('#buttonAgreement-' + id).text('Добавить в публикации');
                         $("#false").show();
                         setTimeout(function () { $("#false").hide(); }, 3000);
                     }
                     else {
-                        $('#buttonAgreement').text('Снять с публикации');
+                        $('#buttonAgreement-' + id).text('Снять с публикации');
                         $("#true").show();
                         setTimeout(function () { $("#true").hide(); }, 3000);
                     }
