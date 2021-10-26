@@ -42,8 +42,9 @@ namespace HeadHunter.Controllers
             ViewBag.CategoryName = _context.CategoryVacancies.Find(vacancy.CategoryVacancyId).Name;
             return View(vacancy);
         }
-        public IActionResult Publications(string searchString, string categoryId, SortState sortOrder = SortState.DateDesc)
+        public IActionResult Publications(string searchString, string categoryId, SortState sortOrder = SortState.DateDesc, int page = 1)
         {
+            int pageSize = 20;
             PublicationsViewModel rlvm = new PublicationsViewModel()
             {
                 CategoryId = categoryId
@@ -79,7 +80,9 @@ namespace HeadHunter.Controllers
                         vacancies = vacancies.OrderByDescending(s => s.DateOfUpdate);
                         break;
                 }
-                rlvm.Vacancies = vacancies;
+                rlvm.PageViewModel = new PageViewModel(vacancies.Count(), page, pageSize);
+                rlvm.Vacancies = vacancies.Skip((page - 1) * pageSize).Take(pageSize);
+                ViewBag.PageCount = (vacancies.Count() + pageSize - 1) / pageSize;
 
             }
             else
@@ -110,10 +113,10 @@ namespace HeadHunter.Controllers
                         break;
                 }
 
-                rlvm.Resumes = resumes;
-
+                rlvm.PageViewModel = new PageViewModel(resumes.Count(), page, pageSize);
+                rlvm.Resumes = resumes.Skip((page - 1) * pageSize).Take(pageSize);
+                ViewBag.PageCount = (resumes.Count() + pageSize - 1) / pageSize;
             }
-
 
             ViewBag.Categories = _context.CategoryVacancies.ToList();
             return View(rlvm);

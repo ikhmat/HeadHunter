@@ -52,9 +52,12 @@ namespace HeadHunter.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    using (var stream = new FileStream(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\avatars\\" + filename), FileMode.Create))
+                    if (filename != "no-avatar.png")
                     {
-                        await model.File.CopyToAsync(stream);
+                        using (var stream = new FileStream(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\avatars\\" + filename), FileMode.Create))
+                        {
+                            await model.File.CopyToAsync(stream);
+                        }
                     }
                     await _userManager.AddToRoleAsync(user, model.Role);
                     await _signInManager.SignInAsync(user, false);
