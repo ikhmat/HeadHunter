@@ -35,22 +35,60 @@
 {
     if (@Model.Vacancies.Count() > 0)
     {
-        <div class="vacancies">
-            @foreach (var item in Model.Vacancies)
-            {
-                <div class="card my-2" onclick="detailsVacancy('@item.Id')" style="cursor:pointer;">
-                    <div class="card-body">
-                        <div>
-                            <p class="float-right" style="font-size: 20px;">from @item.Wage $</p>
-                            <h5 class="card-title">@item.Name</h5>
-                            <a class="text-dark" asp-controller="Public" asp-action="BossesProfile" asp-route-userId="@item.UserId">@item.User.CompanyName</a><br />
-                            <button type="button" class="btn btn-primary my-2">Send Message</button>
-                        </div>
-                        <p class="card-text"><small class="text-muted">Last updated @item.DateOfUpdate</small></p>
-                    </div>
+<div class="vacancies">
+    @foreach (var item in Model.Vacancies)
+    {
+        <div class="card my-2" onclick="detailsVacancy('@item.Id')" style="cursor:pointer;">
+            <div class="card-body">
+                <div>
+                    <p class="float-right" style="font-size: 20px;">from @item.Wage $</p>
+                    <h5 class="card-title">@item.Name</h5>
+                    <a class="text-dark" asp-controller="Public" asp-action="BossesProfile" asp-route-userId="@item.UserId">@item.User.CompanyName</a><br />
+                    <button type="button" class="btn btn-primary my-2">Send Message</button>
                 </div>
-            }
+                <p class="card-text"><small class="text-muted">Last updated @item.DateOfUpdate</small></p>
+            </div>
         </div>
+    }
+<ul class="pagination">
+    @if (Model.PageViewModel.HasPreviousPage)
+    {
+        <li class="page-item">
+            <a asp-action="Publications" asp-route-page="@(Model.PageViewModel.PageNumber - 1)" class="page-link">
+                <span class="material-icons" style="font-size: 1rem">
+                    navigate_before
+                </span>
+            </a>
+        </li>
+    }
+
+    @for (int i = 1; i <= ViewBag.PageCount; i++)
+    {
+        @if (i == Model.PageViewModel.PageNumber)
+        {
+            <li class="page-item active">
+                <a asp-action="Publications" asp-route-page="@i" class="page-link">@i</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a asp-action="Publications" asp-route-page="@i" class="page-link">@i</a>
+            </li>
+        }
+    }
+    @if (Model.PageViewModel.HasNextPage)
+    {
+        <li class="page-item">
+            <a asp-action="Publications" asp-route-page="@(Model.PageViewModel.PageNumber + 1)" class="page-link">
+                <span class="material-icons" style="font-size: 1rem">
+                    navigate_next
+                </span>
+            </a>
+        </li>
+    }
+</ul>
+</div>
     }
     else
     {
@@ -61,22 +99,56 @@ else
 {
     @if (Model.Resumes.ToList().Count > 0)
     {
-        <div class="resumes">
-            @foreach (var item in Model.Resumes)
-            {
-                <div class="card my-2" onclick="detailsResume('@item.Id')" style="cursor:pointer;">
-                    <div class="card-body">
-                        <div>
-                            <p class="float-right" style="font-size: 20px;">from @item.Wage $</p>
-                            <h5 class="card-title">@item.JobTitle</h5>
-                            <a class="text-dark" asp-controller="Public" asp-action="ApplicantProfile" asp-route-userId="@item.UserId">@item.User.Name @item.User.Surname</a><br />
-                            <button type="button" class="btn btn-primary my-2">Send Message</button>
-                        </div>
-                        <p class="card-text"><small class="text-muted">Last updated @item.UpdateDate</small></p>
-                    </div>
+<div class="resumes">
+    @foreach (var item in Model.Resumes)
+    {
+        <div class="card my-2" onclick="detailsResume('@item.Id')" style="cursor:pointer;">
+            <div class="card-body">
+                <div>
+                    <p class="float-right" style="font-size: 20px;">from @item.Wage $</p>
+                    <h5 class="card-title">@item.JobTitle</h5>
+                    <a class="text-dark" asp-controller="Public" asp-action="ApplicantProfile" asp-route-userId="@item.UserId">@item.User.Name @item.User.Surname</a><br />
+                    <button type="button" class="btn btn-primary my-2">Send Message</button>
                 </div>
-            }
+                <p class="card-text"><small class="text-muted">Last updated @item.UpdateDate</small></p>
+            </div>
         </div>
+    }
+<ul class="pagination">
+    @if (Model.PageViewModel.HasPreviousPage)
+    {
+        <li class="page-item">
+            <a asp-action="Publications" asp-route-page="@(Model.PageViewModel.PageNumber - 1)" class="page-link">
+                <i class="glyphicon glyphicon-chevron-left" style="font-size: 1rem"></i>Назад
+            </a>
+        </li>
+    }
+
+    @for (int i = 1; i <= ViewBag.PageCount; i++)
+    {
+        @if (i == Model.PageViewModel.PageNumber)
+        {
+        <li class="page-item active">
+            <a asp-action="Publications" asp-route-page="@i" class="page-link">@i</a>
+        </li>
+        }
+        else {
+        <li class="page-item">
+            <a asp-action="Publications" asp-route-page="@i" class="page-link">@i</a>
+        </li>
+        }
+
+        }
+        @if (Model.PageViewModel.HasNextPage)
+        {
+            <li class="page-item">
+                <a asp-action="Publications" asp-route-page="@(Model.PageViewModel.PageNumber + 1)" class="page-link">
+                    Вперед<i class="glyphicon glyphicon-chevron-right" style="font-size: 1rem"></i>
+                </a>
+            </li>
+        }
+    </ul>
+</div>
     }
     else
     {

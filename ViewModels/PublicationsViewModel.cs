@@ -12,5 +12,6 @@ namespace HeadHunter.ViewModels
         public IEnumerable<Resume> Resumes { get; set; }
         public IEnumerable<Vacancy> Vacancies { get; set; }
         public string CategoryId { get; set; }
+        public PageViewModel PageViewModel { get; set; }
     }
 }
