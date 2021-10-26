@@ -224,6 +224,8 @@ else
                 data: { 'vacancyId': id, 'resumeId': $('#hidden-id').val() },
                 success: function (data) {
                     console.log(data);
+                    window.location.href = '@Url.Action("PersonalChat","Public")?chatId=' + data['chatId'];
+                    //window.location = data.url;
                 }
             });
         }
@@ -236,6 +238,8 @@ else
                 data: { 'vacnacyId': $('#hidden-id').val(), 'resumeid': id },
                 success: function (data) {
                     console.log(data);
+                    window.location.href = '@Url.Action("PersonalChat","Public")?chatId=' + data['chatId'];
+                    //window.location = data.url;
                 }
             });
         }

@@ -159,12 +159,10 @@ namespace HeadHunter.Controllers
             return View(viewModel);
         }
 
-        public IActionResult PersonalChat(string receiverId)
+        public IActionResult PersonalChat(string chatId)
         {
             User user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
-            Chat chat = _context.Chats.FirstOrDefault(
-                u => u.FirstUser.Id == user.Id && u.SecondUser.Id == receiverId || u.FirstUser.Id == receiverId && u.SecondUser.Id == user.Id
-            );
+            Chat chat = _context.Chats.FirstOrDefault(c => c.Id == chatId);
 
             if (chat == null)
             {
@@ -181,7 +179,7 @@ namespace HeadHunter.Controllers
             Chat existChat = await _context.Chats.FirstOrDefaultAsync(c => c.VacancyId == vacancyId && c.ResumeId == resumeId);
             if (existChat != null)
             {
-                return Json(new { chatId = existChat.Id, url = Url.Action("OpenChat", "Public") });
+                return Json(new { chatId = existChat.Id });
             }
             Vacancy vacancy = _context.Vacancies.FirstOrDefault(v => v.Id == vacancyId);
             Resume resume = _context.Resumes.FirstOrDefault(v => v.Id == resumeId);
@@ -197,7 +195,7 @@ namespace HeadHunter.Controllers
             };
             _context.Chats.Add(chat);
             await _context.SaveChangesAsync();
-            return Json(new { chatId = chat.Id, url = Url.Action("OpenChat", "Public") });
+            return Json(new { chatId = chat.Id });
         }
     }
 }
