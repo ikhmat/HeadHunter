@@ -15,9 +15,9 @@
             <img src="~/avatars/@Model.SecondUser.LinkImg" width="50" height="50" class="rounded-circle p-2" />
             <a>@Model.SecondUser.Name @Model.SecondUser.Surname</a>
         }
-        <div class="btn-group">
-            <button type="button" class="btn btn-secondary">Action</button>
-            <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="btn-group float-right">
+            <button type="button" class="btn btn-info">Action</button>
+            <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
             <div class="dropdown-menu">
@@ -27,20 +27,20 @@
         </div>
     </div>
     <div class="card-body">
-        <div id="messages" class="overflow-auto" style="overflow: auto;">
+        <div id="messages" style="overflow: scroll; overflow-x: hidden; height: 500px;">
             @foreach (Message item in ViewBag.Messages)
             {
                 if (item.SenderId == ViewBag.CurrentUser)
                 {
                     <p class="mx-4 my-0 text-right">@item.DateOfSending</p>
-                    <div class="m-3 p-4 rounded w-50 ml-auto text-white" style="background-color:rgb(211, 78, 189);">
+                    <div class="m-3 p-4 w-50 ml-auto text-white" style="border-radius: 30px; background-color:rgb(56, 171, 252);">
                         @item.Text
                     </div>
                 }
                 else
                 {
                     <p class="mx-4 my-0">@item.DateOfSending</p>
-                    <div class="m-3 p-4 rounded w-50 text-light" style="background-color:rgb(40, 40, 40);">
+                    <div class="m-3 p-4 w-50 bg-light" style="border-radius: 30px;">
                         @item.Text
                     </div>
                 }
@@ -57,8 +57,8 @@
         <p id="chatId" style="display: none;">@Model.Id</p>
         <div class="p-1">
             <textarea id="text" rows="4" class="form-control" placeholder="Введите сообщение"></textarea>
-            <a class="btn btn-secondary text-light m-2"
-               onclick="SendMessage()">Отправить</a>
+            <input type="button" class="btn btn-secondary text-light m-2"
+               onclick="SendMessage()" value="Отправить" />
         </div>
     </div>
 </div>
@@ -68,17 +68,17 @@
 {
     <script>
         function SendMessage() {
-            console.log('senderId: ' + $('#senderId').text());
-            console.log('chatid: ' + $('#chatId').text());
-            $.ajax({
-                url: '@Url.Action("SendMessage", "Public")',
-                type: 'POST',
-                data: { 'senderId': $('#senderId').text(), 'chatId': $('#chatId').text(), 'text': $('#text').val() },
-                success: function (data) {
-                    console.log(data);
-                    MessageRight(data);
-                },
-            });
+            if ($('#text').val().length > 0) {
+                $.ajax({
+                    url: '@Url.Action("SendMessage", "Public")',
+                    type: 'POST',
+                    data: { 'senderId': $('#senderId').text(), 'chatId': $('#chatId').text(), 'text': $('#text').val() },
+                    success: function (data) {
+                        console.log(data);
+                        MessageRight(data);
+                    },
+                });
+            }
         }
 
         function MessageRight(data) {
@@ -87,6 +87,7 @@
                 ' style="background-color:rgb(211, 78, 189);" >' +
                 data['text'] + '</div>');
             $('#text').val('');
+            $('#messages').scrollTop($('#messages').prop('scrollHeight'));
         }
 
         function MessageLeft(data) {
@@ -95,6 +96,7 @@
                 ' style="background-color:rgb(40, 40, 40);" > ' +
                 data['text'] + '</div>')
             $('#text').val('');
+            $('#messages').scrollTop($('#messages').prop('scrollHeight'));
         }
 
         function CheckNewMessages() {
@@ -113,6 +115,7 @@
 
             });
         }
+        $('#messages').scrollTop($('#messages').prop('scrollHeight'));
         let i = 1;
         setInterval(function () {
             CheckNewMessages();

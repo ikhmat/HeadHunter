@@ -220,5 +220,13 @@ namespace HeadHunter.Controllers
             Message[] messages = _context.Messages.Where(m => m.ChatId == chatId).OrderBy(m => m.DateOfSending).ToArray();
             return Json(messages.Skip(count));
         }
+
+        public IActionResult Chats()
+        {
+            List<Chat> chats;
+            if (User.IsInRole("boss")) chats = _context.Chats.Include(v => v.Vacancy).Include(r => r.Resume).Include(u => u.FirstUser).Include(u => u.SecondUser).Where(c => c.FirstUserId == _userManager.GetUserId(User)).ToList();
+            else chats = _context.Chats.Include(v => v.Vacancy).Include(r => r.Resume).Include(u => u.FirstUser).Include(u => u.SecondUser).Where(c => c.SecondUserId == _userManager.GetUserId(User)).ToList();
+            return View(chats);
+        }
     }
 }

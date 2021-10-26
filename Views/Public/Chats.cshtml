@@ -1,0 +1,42 @@
+﻿@model List<Chat>
+@{
+    ViewBag.Tittle = "Chats";
+    Layout = "_Layout";
+} 
+
+<div class="border rounded p-3">
+    @foreach (var item in Model)
+    {
+        <div class="card my-2" onclick="OpenChat('@item.Id')" style="cursor:pointer;">
+            <div class="card-body bg-light">
+                <div>
+                    <a style="float: right;" class="btn btn-primary" asp-action="PersonalChat" asp-controller="Public" asp-route-chatId="@item.Id">Перейти к чату</a>
+                    @if (User.IsInRole("boss"))
+                    {
+                        <h5 class="card-title">@item.SecondUser.Surname @item.SecondUser.Name</h5>
+                        <p>@item.Resume.JobTitle - @item.Resume.Wage</p>
+                    }
+                    else
+                    {
+                        <h5 class="card-title">@item.FirstUser.CompanyName</h5>
+                        <p>@item.Vacancy.Name - @item.Vacancy.Wage</p>
+                    }
+                    @*<p class="float-right" style="font-size: 20px;">from @item.Wage $</p>
+        <h5 class="card-title">@item.Name</h5>
+        <a class="text-dark" asp-controller="Public" asp-action="BossesProfile" asp-route-userId="@item.UserId">@item.User.CompanyName</a><br />
+        <button type="button" class="btn btn-primary my-2" data-toggle="modal" data-target="#ChoiseModal" onclick="SaveId('@item.Id')">Send Message</button>*@
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+@section Scripts
+{
+    <script>
+        function OpenChat(chatId) {
+            window.location.href = '@Url.Action("PersonalChat","Public")?chatId=' + chatId;
+        }
+    </script>
+} 
