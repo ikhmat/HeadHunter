@@ -29,10 +29,18 @@
     <div class="card-body">
         @foreach (Message item in ViewBag.Messages)
         {
-            if (true)
+            if (item.SenderId == ViewBag.CurrentUser)
             {
-
+                <div class="m-3 p-4 rounded w-50 ml-auto text-white" style="background-color:rgb(211, 78, 189);">
+                    @item.Text
+                </div>
+            }
+            else
+            {
+                <div class="m-3 p-4 rounded w-50 text-light" style="background-color:rgb(40, 40, 40);">
+                    @item.Text
+                </div>
             }
         }
     </div>
-    </div>
+</div>
