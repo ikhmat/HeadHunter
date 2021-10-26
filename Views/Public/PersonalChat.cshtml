@@ -5,15 +5,15 @@
 }
 <div class="card">
     <div class="card-header">
-        @if (Model.FirstUser.CompanyName != String.Empty)
+        @if (User.IsInRole("applicant"))
         {
             <img src="~/avatars/@Model.FirstUser.LinkImg" width="50" height="50" class="rounded-circle p-2" />
             <a>@Model.FirstUser.CompanyName</a>
         }
         else
         {
-            <img src="~/avatars/@Model.FirstUser.LinkImg" width="50" height="50" class="rounded-circle p-2" />
-            <a>@Model.FirstUser.Name @Model.FirstUser.Surname</a>
+            <img src="~/avatars/@Model.SecondUser.LinkImg" width="50" height="50" class="rounded-circle p-2" />
+            <a>@Model.SecondUser.Name @Model.SecondUser.Surname</a>
         }
         <div class="btn-group">
             <button type="button" class="btn btn-secondary">Action</button>
@@ -27,20 +27,96 @@
         </div>
     </div>
     <div class="card-body">
-        @foreach (Message item in ViewBag.Messages)
+        <div id="messages" class="overflow-auto" style="overflow: auto;">
+            @foreach (Message item in ViewBag.Messages)
+            {
+                if (item.SenderId == ViewBag.CurrentUser)
+                {
+                    <p class="mx-4 my-0 text-right">@item.DateOfSending</p>
+                    <div class="m-3 p-4 rounded w-50 ml-auto text-white" style="background-color:rgb(211, 78, 189);">
+                        @item.Text
+                    </div>
+                }
+                else
+                {
+                    <p class="mx-4 my-0">@item.DateOfSending</p>
+                    <div class="m-3 p-4 rounded w-50 text-light" style="background-color:rgb(40, 40, 40);">
+                        @item.Text
+                    </div>
+                }
+            }
+        </div>
+        @if (@User.IsInRole("boss"))
         {
-            if (item.SenderId == ViewBag.CurrentUser)
-            {
-                <div class="m-3 p-4 rounded w-50 ml-auto text-white" style="background-color:rgb(211, 78, 189);">
-                    @item.Text
-                </div>
-            }
-            else
-            {
-                <div class="m-3 p-4 rounded w-50 text-light" style="background-color:rgb(40, 40, 40);">
-                    @item.Text
-                </div>
-            }
+            <p id="senderId" style="display: none;">@Model.FirstUser.Id</p>
         }
+        else
+        {
+            <p id="senderId" style="display: none;">@Model.SecondUser.Id</p>
+        }
+        <p id="chatId" style="display: none;">@Model.Id</p>
+        <div class="p-1">
+            <textarea id="text" rows="4" class="form-control" placeholder="Введите сообщение"></textarea>
+            <a class="btn btn-secondary text-light m-2"
+               onclick="SendMessage()">Отправить</a>
+        </div>
     </div>
 </div>
+
+
+@section Scripts
+{
+    <script>
+        function SendMessage() {
+            console.log('senderId: ' + $('#senderId').text());
+            console.log('chatid: ' + $('#chatId').text());
+            $.ajax({
+                url: '@Url.Action("SendMessage", "Public")',
+                type: 'POST',
+                data: { 'senderId': $('#senderId').text(), 'chatId': $('#chatId').text(), 'text': $('#text').val() },
+                success: function (data) {
+                    console.log(data);
+                    MessageRight(data);
+                },
+            });
+        }
+
+        function MessageRight(data) {
+            console.log("right" + data);
+            $('#messages').append('<p class="mx-4 my-0 text-right">' + `@DateTime.Now` + '</p><div class="m-3 p-4 rounded w-50 ml-auto text-white"' +
+                ' style="background-color:rgb(211, 78, 189);" >' +
+                data['text'] + '</div>');
+            $('#text').val('');
+        }
+
+        function MessageLeft(data) {
+            console.log("left " + data);
+            $('#messages').append('<p>' + `@DateTime.Now` + '</p><div class="m-3 p-4 rounded w-50 text-light"' +
+                ' style="background-color:rgb(40, 40, 40);" > ' +
+                data['text'] + '</div>')
+            $('#text').val('');
+        }
+
+        function CheckNewMessages() {
+            console.log()
+            $.ajax({
+                url: '@Url.Action("CheckNewMessages", "Public")',
+                type: 'POST',
+                data: { 'chatId': $('#chatId').text(), 'count': $('#messages div').length },
+                success: function(arr) {
+                    console.log(arr);
+                    console.log(i++);
+                    if (arr.length > 0) {
+                        arr.forEach(element => MessageLeft(element));
+                    }
+                },
+
+            });
+        }
+        let i = 1;
+        setInterval(function () {
+            CheckNewMessages();
+        }, 5000);
+
+    </script>
+} 

@@ -162,7 +162,7 @@ namespace HeadHunter.Controllers
         public IActionResult PersonalChat(string chatId)
         {
             User user = _context.Users.FirstOrDefault(u => u.Id == _userManager.GetUserId(User));
-            Chat chat = _context.Chats.FirstOrDefault(c => c.Id == chatId);
+            Chat chat = _context.Chats.Include(u => u.FirstUser).Include(u => u.SecondUser).FirstOrDefault(c => c.Id == chatId);
 
             if (chat == null)
             {
@@ -196,6 +196,29 @@ namespace HeadHunter.Controllers
             _context.Chats.Add(chat);
             await _context.SaveChangesAsync();
             return Json(new { chatId = chat.Id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendMessage(string senderId, string chatId, string text)
+        {
+            Message message = new Message {
+                Id = Guid.NewGuid().ToString(),
+                ChatId = chatId,
+                SenderId = senderId,
+                Text = text.Trim(),
+                DateOfSending = DateTime.Now
+            };
+
+            _context.Messages.Add(message);
+            await _context.SaveChangesAsync();
+            return Json(message);
+        }
+
+        [HttpPost]
+        public IActionResult CheckNewMessages(string chatId, int count)
+        {
+            Message[] messages = _context.Messages.Where(m => m.ChatId == chatId).OrderBy(m => m.DateOfSending).ToArray();
+            return Json(messages.Skip(count));
         }
     }
 }
