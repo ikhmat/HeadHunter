@@ -241,7 +241,7 @@ else
             $.ajax({
                 url: '@Url.Action("CreateChat", "Public")',
                 type: 'POST',
-                data: { 'vacnacyId': $('#hidden-id').val(), 'resumeid': id },
+                data: { 'vacancyId': $('#hidden-id').val(), 'resumeid': id },
                 success: function (data) {
                     console.log(data);
                     window.location.href = '@Url.Action("PersonalChat","Public")?chatId=' + data['chatId'];

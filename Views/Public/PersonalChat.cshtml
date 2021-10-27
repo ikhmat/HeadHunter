@@ -8,12 +8,12 @@
         @if (User.IsInRole("applicant"))
         {
             <img src="~/avatars/@Model.FirstUser.LinkImg" width="50" height="50" class="rounded-circle p-2" />
-            <a>@Model.FirstUser.CompanyName</a>
+            <a class="text-dark" asp-controller="Public" asp-action="BossesProfile" asp-route-userId="@Model.FirstUser.Id">@Model.FirstUser.CompanyName</a>
         }
         else
         {
             <img src="~/avatars/@Model.SecondUser.LinkImg" width="50" height="50" class="rounded-circle p-2" />
-            <a>@Model.SecondUser.Name @Model.SecondUser.Surname</a>
+            <a class="text-dark" asp-controller="Public" asp-action="ApplicantProfile" asp-route-userId="@Model.SecondUser.Id">@Model.SecondUser.Name @Model.SecondUser.Surname</a>
         }
         <div class="btn-group float-right">
             <button type="button" class="btn btn-info">Action</button>
